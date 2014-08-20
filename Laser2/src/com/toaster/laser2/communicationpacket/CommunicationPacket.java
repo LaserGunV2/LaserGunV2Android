@@ -1,4 +1,4 @@
-package com.toaster.communicationpacket;
+package com.toaster.laser2.communicationpacket;
 
 import java.io.IOException;
 import java.io.StringWriter;

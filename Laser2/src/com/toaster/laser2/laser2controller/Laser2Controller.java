@@ -3,8 +3,8 @@ package com.toaster.laser2.laser2controller;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import com.toaster.communicationpacket.CommunicationPacket;
 import com.toaster.laser2.UIHandler;
+import com.toaster.laser2.communicationpacket.CommunicationPacket;
 import com.toaster.laser2.locationcontroller.LocationController;
 import com.toaster.laser2.locationcontroller.LocationControllerHandler;
 import com.toaster.udpcommunication.IMessageHandler;
