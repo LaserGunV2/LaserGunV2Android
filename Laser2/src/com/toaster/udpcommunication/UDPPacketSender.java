@@ -58,7 +58,7 @@ public class UDPPacketSender implements Runnable
 			} 
 			catch (IOException e) 
 			{
-			
+				System.out.println(e);
 			}
 		}
 	}

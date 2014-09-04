@@ -1,7 +1,8 @@
 package com.toaster.udpcommunication;
 
+import java.net.InetAddress;
+
 public interface IMessageHandler 
 {
-	void onMessageReceived(byte[] buffer,int length);
-	int getMessageTag();
+	void onMessageReceived(InetAddress senderAddress,byte[] buffer,int length);
 }

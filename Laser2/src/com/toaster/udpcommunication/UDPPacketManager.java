@@ -18,12 +18,13 @@ public class UDPPacketManager implements IMessageSender
 {
 	protected UDPPacketReceiver receiver;
 	protected UDPPacketSender sender;
-	protected DatagramSocket socket;
+	//protected DatagramSocket socket;
 	protected boolean isIntentionallyClosed;
-	boolean hasFixedTarget;
+	//boolean hasFixedTarget;
 	protected InetAddress broadcastAddress; 
+	protected int targetPort;
 	
-	public static UDPPacketManager createBroadcastUDPManager(IMessageHandler handler,Context context,int port)
+	public static UDPPacketManager createBroadcastUDPManager(IMessageHandler handler,Context context,int targetPort,int receivePort)
 	{
 		
 		UDPPacketManager result=null;
@@ -32,7 +33,8 @@ public class UDPPacketManager implements IMessageSender
 		if (dhcpInfo!=null)
 		{
 			
-			DatagramSocket socket;
+			DatagramSocket receiveSocket;
+			DatagramSocket sendSocket;
 			int broadCastAddressInt=dhcpInfo.ipAddress&dhcpInfo.netmask|~dhcpInfo.netmask;
 			byte[] quad=new byte[4];
 			for (int i=0;i<4;i++)
@@ -41,14 +43,14 @@ public class UDPPacketManager implements IMessageSender
 			}
 			try
 			{
-				Log.v("UDPPacketManager", "broadcast inet address="+  dhcpInfo.ipAddress);
-				//Log.v("UDPPacketManager", "broadcast netmask ="+InetAddress.getByAddress(quad).getHostAddress());
-				Log.v("UDPPacketManager", "broadcast address="+InetAddress.getByAddress(quad).getHostAddress());
-				socket=new DatagramSocket(port);
-				//socket.connect(new InetSocketAddress(InetAddress.getByAddress(quad),port));
-				result=new UDPPacketManager(socket, handler);
+				//Log.v("UDPPacketManager", "broadcast inet address="+  dhcpInfo.ipAddress);
+				//Log.v("UDPPacketManager", "broadcast address="+InetAddress.getByAddress(quad).getHostAddress());
+				sendSocket=new DatagramSocket();
+				receiveSocket=new DatagramSocket(receivePort);
+				result=new UDPPacketManager(sendSocket,receiveSocket, handler);
 				result.broadcastAddress=InetAddress.getByAddress(quad);
-				result.hasFixedTarget=false;
+				result.targetPort=targetPort;
+				//result.hasFixedTarget=false;
 			}
 			catch (Exception e)
 			{
@@ -61,28 +63,31 @@ public class UDPPacketManager implements IMessageSender
 			return null;
 	}
 	
-	public static UDPPacketManager createTargetedUDPManager(IMessageHandler handler,InetAddress targetAddress,int port)
+	/*
+	public static UDPPacketManager createTargetedUDPManager(IMessageHandler handler,InetAddress targetAddress,int targetPort,int receivePort)
 	{
-		DatagramSocket socket=null;
+		DatagramSocket targetSocket=null;
+		DatagramSocket receiveSocket=null;
 		try 
 		{
-			socket=new DatagramSocket(port);
-			socket.connect(new InetSocketAddress(targetAddress,port));
+			receiveSocket=new DatagramSocket(receivePort);
+			targetSocket.connect(new InetSocketAddress(targetAddress,targetPort));
 		} 
 		catch (SocketException e) 
 		{	
 		}
-		UDPPacketManager result=new UDPPacketManager(socket,handler);
+		UDPPacketManager result=new UDPPacketManager(targetSocket,receiveSocket,handler);
 		result.hasFixedTarget=true;
 		return result;
+	}*/
+	
+	private UDPPacketManager(DatagramSocket sendSocket, DatagramSocket receiveSocket,IMessageHandler handler)
+	{
+		//this.socket=targetSocket;
+		this.receiver=new UDPPacketReceiver(this, receiveSocket, handler);
+		this.sender=new UDPPacketSender(this, sendSocket);
 	}
 	
-	private UDPPacketManager(DatagramSocket socket,IMessageHandler handler)
-	{
-		this.socket=socket;
-		this.receiver=new UDPPacketReceiver(this, socket, handler);
-		this.sender=new UDPPacketSender(this, socket);
-	}
 	
 	public void onSocketClosedHandler()
 	{
@@ -97,29 +102,35 @@ public class UDPPacketManager implements IMessageSender
 		receiver.cleanup();
 	}
 
-	@Override
-	public boolean send(byte[] buffer, int offset, int length, int option) 
-	{
-		if (hasFixedTarget)
-		{
-			Log.v("UDPPacketManager", "send "+length);
-			sender.send(new DatagramPacket(buffer, length));
-			return true;
-		}
-		else
-			return false;
-	}
+//	@Override
+//	public boolean send(byte[] buffer, int offset, int length, int option) 
+//	{
+//		if (hasFixedTarget)
+//		{
+//			Log.v("UDPPacketManager", "send "+length);
+//			sender.send(new DatagramPacket(buffer, length));
+//			return true;
+//		}
+//		else
+//			return false;
+//	}
 
 	@Override
 	public boolean send(byte[] buffer, int offset, int length, int option,
 			InetAddress targetAddr) 
 	{
-		return false;
+		sender.send(new DatagramPacket(buffer, length,targetAddr,targetPort));
+		return true;
 	}
 
 	@Override
 	public boolean broadcast(byte[] buffer, int offset, int length, int option) 
 	{
+		sender.send(new DatagramPacket(buffer, length,broadcastAddress,targetPort));
+		return true;
+		
+		/*
+	
 		if (!hasFixedTarget)
 		{
 			Log.v("UDPPacketManager", "broadcast "+length);
@@ -129,5 +140,6 @@ public class UDPPacketManager implements IMessageSender
 		}
 		else
 			return false;
+			*/
 	}
 }

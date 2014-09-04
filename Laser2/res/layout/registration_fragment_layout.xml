@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+  	>
+  	<TextView 
+  	    android:id="@+id/labelGameId"
+  	    android:layout_width="wrap_content" 
+  	    android:textSize="20dp"
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_alignParentTop="true"
+  	    android:text="Game Id"
+  	    />
+  	 <EditText 
+        android:id="@+id/editTextGameId"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+		android:layout_alignParentTop="true"
+		android:layout_toRightOf="@id/labelGameId"
+		android:inputType="number"
+        />
+  	
+  	 <EditText 
+		android:id="@+id/editTextNIK"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content" 
+    	android:layout_alignLeft="@id/editTextGameId"
+    	android:layout_below="@id/editTextGameId"
+    	android:inputType="number"
+        />
+    <TextView 
+  	    android:id="@+id/labelNIK"
+  	    android:textSize="20dp"
+  	    android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_alignTop="@id/editTextNIK"
+  	    android:text="NIK"
+  	    />
+     <TextView 
+        android:id="@+id/textViewStatus"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_below="@id/editTextNIK"
+        />
+     <Button 
+        android:id="@+id/buttonConnect"
+        android:text="Connect"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_below="@id/textViewStatus"
+        />
+    
+
+</RelativeLayout>

@@ -43,7 +43,7 @@ public class UDPPacketReceiver implements Runnable
 				//Log.v("UDPReceiver", "waiting for packet");
 				socket.receive(receivedPacket);
 				//Log.v("UDPReceiver", "got packet:"+receivedPacket.getLength());
-				handler.onMessageReceived(buffer, receivedPacket.getLength());
+				handler.onMessageReceived(receivedPacket.getAddress(),buffer, receivedPacket.getLength());
 			} 
 			catch (IOException e) 
 			{
