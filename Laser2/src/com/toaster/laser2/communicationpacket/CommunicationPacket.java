@@ -14,7 +14,7 @@ import android.util.Log;
 public abstract class CommunicationPacket 
 {
 	protected static final String NAME_TYPE="type";
-	public static final String MESSAGETYPE_UPDATE="update";
+	public static final String MESSAGETYPE_UPDATE="event/update";
 	public static final String MESSAGETYPE_ENDGAME="endgame";
 	public static final String MESSAGETYPE_REGISTER="register";
 	public static final String MESSAGETYPE_CONFIRM="confirm";
@@ -50,6 +50,10 @@ public abstract class CommunicationPacket
 		{
 			//return new RegistrationPacket(keyValueHashmap.get(RegistrationPacket.NAME_GAMEID), keyValueHashmap.get(RegistrationPacket.NAME_NOMORINDUK));
 			return new ConfirmPacket(Integer.valueOf(keyValueHashmap.get(ConfirmPacket.NAME_ANDROIDID).toString()));
+		}
+		else if (type.equals(MESSAGETYPE_ENDGAME))
+		{
+			return new EndGamePacket();
 		}
 		//String type=jsonReader.
 		return null;

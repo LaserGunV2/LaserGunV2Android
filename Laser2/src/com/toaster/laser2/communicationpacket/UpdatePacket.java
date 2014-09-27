@@ -8,15 +8,21 @@ import android.util.JsonWriter;
 public class UpdatePacket extends CommunicationPacket 
 {
 	protected static final String NAME_TIME="time";
-	protected static final String NAME_ANDROIDID="androidid";
+	protected static final String NAME_ANDROIDID="androidId";
 	protected static final String NAME_LOCATION="location";
 	protected static final String NAME_ACCURACY="accuracy";
 	protected static final String NAME_HEADING="heading";
 	protected static final String NAME_ACTION="action";
+	protected static final String NAME_STATE="state";
 	
 	public static final String ACTIONTYPE_HIT="hit";
 	public static final String ACTIONTYPE_SHOOT="shoot";
 	public static final String ACTIONTYPE_UPDATE="update";
+	
+	public static final String STATE_ALIVESTAND="alive/stand";
+	public static final String STATE_ALIVECRAWL="alive/crawl";
+	public static final String STATE_DEADSTAND="dead/stand";
+	public static final String STATE_DEADCRAWL="dead/crawl";
 	
 	public String id;
 	public String type;
@@ -24,6 +30,7 @@ public class UpdatePacket extends CommunicationPacket
 	public float heading;
 	public long packageTime;
 	public String action;
+	public String state;
 	
 	public UpdatePacket()
 	{
@@ -46,6 +53,7 @@ public class UpdatePacket extends CommunicationPacket
 			jsonWriter.name(NAME_ACCURACY).value(location.getAccuracy());
 			jsonWriter.name(NAME_HEADING).value(heading);
 			jsonWriter.name(NAME_ACTION).value(action);
+			jsonWriter.name(NAME_STATE).value(state);
 			jsonWriter.endObject();
 		} 
 		catch (IOException e) 

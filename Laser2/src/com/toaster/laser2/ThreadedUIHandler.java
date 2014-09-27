@@ -8,6 +8,8 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 {
 	protected static final int MSG_appendDebug=0;
 	protected static final int MSG_clearDebug=1;
+	protected static final int MSG_setandroidid=2;
+	protected static final int MSG_setuimode=3;
 	
 	
 	protected UIHandler actualUI;
@@ -34,6 +36,18 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 				actualUI.clearDebug();
 			}
 			break;
+			case MSG_setandroidid:
+			{
+				String par=(String)msg.obj;
+				actualUI.setAndroidId(par);
+			}
+			break;
+			case MSG_setuimode:
+			{
+				Integer par=(Integer)msg.obj;
+				actualUI.setUIMode(par.intValue());
+			}
+			break;
 		}
 	}
 
@@ -47,5 +61,16 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 	public void clearDebug() 
 	{
 		(this.obtainMessage(MSG_clearDebug)).sendToTarget();
+	}
+
+	@Override
+	public void setAndroidId(String androidId) {
+		(this.obtainMessage(MSG_setandroidid, androidId)).sendToTarget();
+	}
+
+	@Override
+	public void setUIMode(int uiMode) {
+		(this.obtainMessage(MSG_setuimode, new Integer(uiMode))).sendToTarget();
+		
 	}
 }

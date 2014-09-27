@@ -1468,15 +1468,19 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f080035;
         public static final int action_bar_title=0x7f080034;
         public static final int action_context_bar=0x7f08002f;
+        public static final int action_exit=0x7f08005f;
         public static final int action_menu_divider=0x7f080028;
         public static final int action_menu_presenter=0x7f080029;
         public static final int action_mode_close_button=0x7f080036;
-        public static final int action_settings=0x7f080055;
         public static final int activity_chooser_view_content=0x7f080037;
         public static final int always=0x7f08001e;
+        public static final int androidIdLabel=0x7f080056;
+        public static final int androidIdLabel_debug=0x7f080055;
         public static final int beginning=0x7f080023;
         public static final int book_now=0x7f080010;
-        public static final int buttonConnect=0x7f080054;
+        public static final int buttonConnect=0x7f08005e;
+        public static final int buttonConnect_debug=0x7f080054;
+        public static final int buttonDebugVerification=0x7f080058;
         public static final int buyButton=0x7f08000a;
         public static final int buy_now=0x7f08000f;
         public static final int buy_with_google=0x7f08000e;
@@ -1487,8 +1491,11 @@ containing a value of this type.
         public static final int dialog=0x7f080021;
         public static final int disableHome=0x7f08001b;
         public static final int dropdown=0x7f080022;
-        public static final int editTextGameId=0x7f080050;
-        public static final int editTextNIK=0x7f080051;
+        public static final int editTextDebugVerification=0x7f080057;
+        public static final int editTextGameId=0x7f08005a;
+        public static final int editTextGameId_debug=0x7f080050;
+        public static final int editTextNIK=0x7f08005b;
+        public static final int editTextNIK_debug=0x7f080051;
         public static final int edit_query=0x7f080042;
         public static final int end=0x7f080025;
         public static final int expand_activities_button=0x7f080038;
@@ -1503,8 +1510,10 @@ containing a value of this type.
         public static final int icon=0x7f08003c;
         public static final int ifRoom=0x7f08001d;
         public static final int image=0x7f080039;
-        public static final int labelGameId=0x7f08004f;
-        public static final int labelNIK=0x7f080052;
+        public static final int labelGameId=0x7f080059;
+        public static final int labelGameId_debug=0x7f08004f;
+        public static final int labelNIK=0x7f08005c;
+        public static final int labelNIK_debug=0x7f080052;
         public static final int listMode=0x7f080014;
         public static final int list_item=0x7f08003b;
         public static final int match_parent=0x7f08000c;
@@ -1539,7 +1548,8 @@ containing a value of this type.
         public static final int submit_area=0x7f08004b;
         public static final int tabMode=0x7f080015;
         public static final int terrain=0x7f080003;
-        public static final int textViewStatus=0x7f080053;
+        public static final int textViewStatus=0x7f08005d;
+        public static final int textViewStatus_debug=0x7f080053;
         public static final int title=0x7f08003d;
         public static final int top_action_bar=0x7f080032;
         public static final int up=0x7f080033;
@@ -1599,8 +1609,10 @@ containing a value of this type.
         public static final int abc_search_view=0x7f030016;
         public static final int abc_simple_decor=0x7f030017;
         public static final int activity_main=0x7f030018;
-        public static final int registration_fragment_layout=0x7f030019;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001a;
+        public static final int debug_fragment_layout=0x7f030019;
+        public static final int game_fragment_layout=0x7f03001a;
+        public static final int registration_fragment_layout=0x7f03001b;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;
@@ -1646,8 +1658,6 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f06002b;
-        public static final int action_settings=0x7f06002f;
-        public static final int app_name=0x7f06002d;
         public static final int auth_client_needs_enabling_title=0x7f060001;
         public static final int auth_client_needs_installation_title=0x7f060002;
         public static final int auth_client_needs_update_title=0x7f060003;
@@ -1743,7 +1753,6 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f06001e;
-        public static final int hello_world=0x7f06002e;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

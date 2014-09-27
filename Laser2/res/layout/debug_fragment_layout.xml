@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <TextView 
+  	    android:id="@+id/labelGameId_debug"
+  	    android:layout_width="wrap_content" 
+  	    android:textSize="20dp"
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_alignParentTop="true"
+  	    android:text="Game Id"
+  	    />
+  	 <EditText 
+        android:id="@+id/editTextGameId_debug"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+		android:layout_alignParentTop="true"
+		android:layout_toRightOf="@id/labelGameId_debug"
+		android:inputType="number"
+        />
+  	
+  	 <EditText 
+		android:id="@+id/editTextNIK_debug"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content" 
+    	android:layout_alignLeft="@id/editTextGameId_debug"
+    	android:layout_below="@id/editTextGameId_debug"
+    	android:inputType="number"
+        />
+    <TextView 
+  	    android:id="@+id/labelNIK_debug"
+  	    android:textSize="20dp"
+  	    android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_alignTop="@id/editTextNIK_debug"
+  	    android:text="NIK"
+  	    />
+     <TextView 
+        android:id="@+id/textViewStatus_debug"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_below="@id/editTextNIK_debug"
+        />
+     <Button 
+        android:id="@+id/buttonConnect_debug"
+        android:text="Connect"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_below="@id/textViewStatus_debug"
+        />
+      <TextView 
+        android:id="@+id/androidIdLabel_debug"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/buttonConnect_debug"
+        android:gravity="center"
+        />
+    
+    
+
+</RelativeLayout>
