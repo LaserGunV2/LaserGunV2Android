@@ -36,6 +36,7 @@ public class UpdatePacket extends CommunicationPacket
 	{
 		super();
 		this.type=CommunicationPacket.MESSAGETYPE_UPDATE;
+		this.action=ACTIONTYPE_UPDATE;
 	}
 	
 	@Override

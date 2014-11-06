@@ -1,5 +1,8 @@
 package com.toaster.laser2;
 
+import com.toaster.laser2.fragment.DebugFragment;
+import com.toaster.laser2.fragment.GameFragment;
+import com.toaster.laser2.fragment.RegistrationFragment;
 import com.toaster.laser2.laser2controller.Laser2Controller;
 
 import android.support.v4.app.FragmentManager;
@@ -7,10 +10,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -18,7 +23,7 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 {
 	public static final int UIMODE_REGISTRATION=0;
 	public static final int UIMODE_GAME=1;
-	
+	public static final int UIMODE_DEBUG=2;
 	
 	protected ThreadedUIHandler uiHandler;
 	//protected TextView debugView;
@@ -26,6 +31,7 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 	protected Laser2Controller mainController;
 	protected RegistrationFragment registrationFragment;
 	protected GameFragment gameFragment;
+	protected DebugFragment debugFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -33,15 +39,18 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		super.onCreate(savedInstanceState);
 		View mainView=this.getLayoutInflater().inflate(R.layout.activity_main, null);
 		setContentView(mainView);
-		fragContainer=(ViewGroup)this.findViewById(R.id.fragContainer);
+		this.fragContainer=(ViewGroup)this.findViewById(R.id.fragContainer);
 		//debugView=(TextView)this.findViewById(R.id.debugView);
-		uiHandler=new ThreadedUIHandler(this, this.getMainLooper());
-		mainController=new Laser2Controller(this, uiHandler);
+		this.uiHandler=new ThreadedUIHandler(this, this.getMainLooper());
+		this.mainController=new Laser2Controller(this, uiHandler);
 		
-		registrationFragment=new RegistrationFragment();
-		gameFragment=new GameFragment();
-		registrationFragment.setController(mainController);
-		gameFragment.setController(mainController);
+		this.registrationFragment=new RegistrationFragment();
+		this.gameFragment=new GameFragment();
+		this.registrationFragment.setController(mainController);
+		this.gameFragment.setController(mainController);
+		this.debugFragment=new DebugFragment();
+		this.debugFragment.setController(mainController);
+		
 		mainView.setKeepScreenOn(true);
 	
 		
@@ -49,10 +58,14 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		FragmentTransaction fragTrans=fragmentManager.beginTransaction();
 		fragTrans.add(R.id.fragContainer, registrationFragment);
 		fragTrans.add(R.id.fragContainer, gameFragment);
+		fragTrans.add(R.id.fragContainer, debugFragment);
 		fragTrans.commit();
-	
 		
 		setUIMode(UIMODE_REGISTRATION);
+		
+		Bundle registrationBundle=new Bundle();
+		registrationBundle.putSerializable("errorList", mainController.getErrorList());
+		registrationFragment.setArguments(registrationBundle);
 	}
 
 	@Override
@@ -69,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		FragmentTransaction fragTrans=fragmentManager.beginTransaction();
 		fragTrans.hide(registrationFragment);
 		fragTrans.hide(gameFragment);
+		fragTrans.hide(debugFragment);
 		if (mode==UIMODE_REGISTRATION)
 		{
 			fragTrans.show(registrationFragment);
@@ -77,11 +91,16 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		{
 			fragTrans.show(gameFragment);
 		}
+		else if (mode==UIMODE_DEBUG)
+		{
+			fragTrans.show(debugFragment);
+		}
 		fragTrans.commit();
 		//untuk hide keyboard sehabis pencet connect
 		InputMethodManager inputMethodManager = (InputMethodManager)  this.getSystemService(Context.INPUT_METHOD_SERVICE);
 	    if (this.getCurrentFocus()!=null)
 	    	inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+	    
 	}
 
 	@Override
@@ -116,4 +135,33 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		gameFragment.setAndroidId(androidId);
 		
 	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		if ((keyCode==KeyEvent.KEYCODE_BACK)||(keyCode==KeyEvent.KEYCODE_HOME))
+			return true; 
+		else
+			return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void setStatus(String status) {
+		this.registrationFragment.setStatus(status);
+		this.debugFragment.setStatus(status);
+	}
+
+	@Override
+	public void setDebugStatus(String debugStatus) {
+		debugFragment.setDebugStatus(debugStatus);
+		
+	}
+
+	@Override
+	public void setPlayerAliveStatus(boolean isPlayerAlive)
+	{
+		gameFragment.setPlayerAliveStatus(isPlayerAlive);
+		debugFragment.setPlayerAliveStatus(isPlayerAlive);
+	}
+
 }

@@ -8,9 +8,11 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 {
 	protected static final int MSG_appendDebug=0;
 	protected static final int MSG_clearDebug=1;
-	protected static final int MSG_setandroidid=2;
-	protected static final int MSG_setuimode=3;
-	
+	protected static final int MSG_setAndroidId=2;
+	protected static final int MSG_setUiMode=3;
+	protected static final int MSG_setStatus=4;
+	protected static final int MSG_setDebugStatus=5;
+	protected static final int MSG_setPlayerAliveStatus=6;
 	
 	protected UIHandler actualUI;
 	
@@ -36,16 +38,34 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 				actualUI.clearDebug();
 			}
 			break;
-			case MSG_setandroidid:
+			case MSG_setAndroidId:
 			{
 				String par=(String)msg.obj;
 				actualUI.setAndroidId(par);
 			}
 			break;
-			case MSG_setuimode:
+			case MSG_setUiMode:
 			{
 				Integer par=(Integer)msg.obj;
 				actualUI.setUIMode(par.intValue());
+			}
+			break;
+			case MSG_setStatus:
+			{
+				String par=(String)msg.obj;
+				actualUI.setStatus(par);
+			}
+			break;
+			case MSG_setDebugStatus:
+			{
+				String par=(String)msg.obj;
+				actualUI.setDebugStatus(par);
+			}
+			break;
+			case MSG_setPlayerAliveStatus:
+			{
+				Boolean par=(Boolean)msg.obj;
+				actualUI.setPlayerAliveStatus(par.booleanValue());
 			}
 			break;
 		}
@@ -65,12 +85,32 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 
 	@Override
 	public void setAndroidId(String androidId) {
-		(this.obtainMessage(MSG_setandroidid, androidId)).sendToTarget();
+		(this.obtainMessage(MSG_setAndroidId, androidId)).sendToTarget();
 	}
 
 	@Override
 	public void setUIMode(int uiMode) {
-		(this.obtainMessage(MSG_setuimode, new Integer(uiMode))).sendToTarget();
+		(this.obtainMessage(MSG_setUiMode, new Integer(uiMode))).sendToTarget();
 		
 	}
+
+	@Override
+	public void setStatus(String status) {
+		(this.obtainMessage(MSG_setStatus,status)).sendToTarget();
+	}
+
+	@Override
+	public void setDebugStatus(String debugStatus) {
+		(this.obtainMessage(MSG_setDebugStatus,debugStatus)).sendToTarget();
+	}
+
+	@Override
+	public void setPlayerAliveStatus(boolean isPlayerAlive)
+	{
+		(this.obtainMessage(MSG_setPlayerAliveStatus,Boolean.valueOf(isPlayerAlive))).sendToTarget();
+		
+	}
+	
+	
+
 }

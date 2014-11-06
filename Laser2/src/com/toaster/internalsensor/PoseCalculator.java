@@ -25,7 +25,7 @@ public class PoseCalculator implements SensorEventListener
 		this.axisMAvg=new MovingAverageCalculator[3];
 		for (int i=0;i<this.axisMAvg.length;i++)
 		{
-			this.axisMAvg[i]=new MovingAverageCalculator(100);
+			this.axisMAvg[i]=new MovingAverageCalculator(50);
 		}
 	}
 	

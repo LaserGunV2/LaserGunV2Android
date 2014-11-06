@@ -11,20 +11,5 @@
         android:textSize="100dp"
         android:gravity="center"
         />
-    <EditText 
-        android:id="@+id/editTextDebugVerification"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/androidIdLabel"
-        />
-    <Button 
-        android:id="@+id/buttonDebugVerification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/editTextDebugVerification"
-        android:layout_below="@id/androidIdLabel"
-        android:text="Debug"
-        />
-
+   
 </RelativeLayout>

@@ -38,30 +38,122 @@
     	android:layout_alignTop="@id/editTextNIK_debug"
   	    android:text="NIK"
   	    />
-     <TextView 
-        android:id="@+id/textViewStatus_debug"
-    	android:layout_width="fill_parent" 
-    	android:layout_height="wrap_content"   
-    	android:layout_alignParentLeft="true"
-    	android:layout_below="@id/editTextNIK_debug"
-        />
      <Button 
         android:id="@+id/buttonConnect_debug"
         android:text="Connect"
     	android:layout_width="fill_parent" 
     	android:layout_height="wrap_content"   
     	android:layout_alignParentLeft="true"
-    	android:layout_below="@id/textViewStatus_debug"
+    	android:layout_below="@id/editTextNIK_debug"
         />
-      <TextView 
-        android:id="@+id/androidIdLabel_debug"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/buttonConnect_debug"
-        android:gravity="center"
+     
+     
+     
+     <Button 
+        android:id="@+id/buttonDisconnect_debug"
+        android:text="Disconnect"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_below="@id/buttonConnect_debug"
         />
-    
-    
+	 <TextView 
+        android:id="@+id/textViewStatus_debug"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_below="@id/buttonDisconnect_debug"
+        />
+ 
+     <TextView 
+        android:id="@+id/textViewDebugOutput"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_below="@id/buttonDisconnect_debug"
+        />
+     
+    <RelativeLayout 
+        android:id="@+id/SimulateShotByLayout"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"   
+		android:layout_alignParentLeft="true"
+		android:layout_below="@id/textViewDebugOutput">
+		
+		<TextView 
+	  	    android:id="@+id/labelShooterGunId"
+	  	    android:layout_width="wrap_content" 
+	  	    android:textSize="15dp"
+	    	android:layout_height="wrap_content"   
+	    	android:layout_alignBaseline="@+id/editTextShooterGunId"
+	    	android:layout_alignParentTop="true"
+	  	    android:text="Shooter GunId"
+  	    />
+	 	<EditText 
+	      	android:id="@id/editTextShooterGunId"
+		   	android:layout_width="100dp" 
+		   	android:layout_height="wrap_content"   
+			android:layout_alignParentTop="true"
+			android:layout_toLeftOf="@+id/buttonSimulateShotBy"
+			android:inputType="number"
+       	/>
+  	
+	 	<TextView 
+	  	    android:id="@+id/labelShooterBulletCounter"
+	  	    android:textSize="15dp"
+	  	    android:layout_width="wrap_content" 
+	    	android:layout_height="wrap_content"   
+	    	android:layout_alignParentLeft="true"
+	    	android:layout_alignBaseline="@+id/editTextShooterBulletCounter"
+	  	    android:text="Bullet Counter"
+  	    />
+	 	
+		<EditText 
+			android:id="@+id/editTextShooterBulletCounter"
+	    	android:layout_width="100dp" 
+	    	android:layout_height="wrap_content" 
+	    	android:layout_alignLeft="@id/editTextShooterGunId"
+	    	android:layout_below="@id/editTextShooterGunId"
+	    	android:inputType="number"
+        />
+	    
+		<Button 
+	        android:id="@id/buttonSimulateShotBy"
+	        android:text="Simulate Getting Shot"
+	    	android:layout_width="100dp" 
+	    	android:layout_height="wrap_content"   
+	    	android:layout_alignParentRight="true"
+	    	android:layout_alignParentTop="true"
+        />
+		
+    </RelativeLayout>
+      
+    <RelativeLayout 
+        android:id="@+id/PingLayout"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"   
+		android:layout_alignParentLeft="true"
+		android:layout_below="@id/SimulateShotByLayout">
+		
+		<Button 
+	        android:id="@+id/buttonPing"
+	        android:text="Ping"
+	    	android:layout_width="wrap_content" 
+	    	android:layout_height="wrap_content"   
+	    	android:layout_alignParentLeft="true"
+	    	android:layout_alignParentTop="true"
+        />
+		
+		<TextView 
+	  	    android:id="@+id/textviewPingResult"
+	  	    android:textSize="15dp"
+	  	    android:layout_width="wrap_content" 
+	    	android:layout_height="wrap_content"   
+	    	android:layout_toRightOf="@id/buttonPing"
+	    	android:layout_alignBaseline="@id/buttonPing"
+	  	    android:text=""
+  	    />
+		
+    </RelativeLayout>
 
 </RelativeLayout>

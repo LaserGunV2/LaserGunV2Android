@@ -28,7 +28,7 @@ public class AzimuthCalculator implements SensorEventListener
 
     //
     
-    protected MovingAverageCalculator azimuthMAvg;
+    protected AzimuthMovingAverageCalculator azimuthMAvg;
     protected InternalSensorHandler handler;
     
     public AzimuthCalculator(InternalSensorHandler handler)
@@ -36,7 +36,7 @@ public class AzimuthCalculator implements SensorEventListener
     	this.handler=handler;
     	this.m_NormEastVector = new float[3];
     	this.m_NormNorthVector = new float[3];
-    	this.azimuthMAvg=new MovingAverageCalculator(100);
+    	this.azimuthMAvg=new AzimuthMovingAverageCalculator(50);
     }
 	
 	@Override
@@ -113,10 +113,12 @@ public class AzimuthCalculator implements SensorEventListener
 	            //m_azimuth_radians += screen_adjustment;
 	            //m_pitch_axis_radians += screen_adjustment;
 	            m_OrientationOK = true;      
-	            azimuthMAvg.insertData((float)Math.toDegrees(m_azimuth_radians));
-	            float deg360=azimuthMAvg.getCurrentValue();
+	            azimuthMAvg.insertData(m_azimuth_radians);
+	            float deg360=(float)Math.toDegrees(azimuthMAvg.getCurrentValue());
 	            if (deg360<0)
+		        {
 	            	deg360=360+deg360;
+		        }
 	            handler.onAzimuthUpdated(deg360);
 	        }
 	    }		

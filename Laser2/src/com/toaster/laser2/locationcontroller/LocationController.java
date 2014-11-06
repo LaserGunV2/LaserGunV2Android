@@ -8,8 +8,6 @@ import com.toaster.locationservicelistener.LocationServiceListener;
 
 public class LocationController implements LocationListener
 {
-	
-	
 	protected final static int UPDATE_INTERVAL=1000;
 	
 	protected LocationServiceListener locSrvListener;
@@ -17,10 +15,23 @@ public class LocationController implements LocationListener
 	
 	public LocationController(Context context,LocationControllerHandler handler)
 	{
-		locSrvListener=new LocationServiceListener(context, this, UPDATE_INTERVAL);
+		this.locSrvListener=new LocationServiceListener(context, this, UPDATE_INTERVAL);
 		this.handler=handler;
 	}
 
+	public boolean getStatus()
+	{
+		if (this.locSrvListener.getStatus()==LocationServiceListener.STATUS_ERROR)
+			return false;
+		else 
+			return true;
+	}
+	
+	public int getErrorCode()
+	{
+		return this.locSrvListener.getErrorType();
+	}
+	
 	@Override
 	public void onLocationChanged(Location newLocation) 
 	{

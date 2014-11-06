@@ -38,21 +38,37 @@
     	android:layout_alignTop="@id/editTextNIK"
   	    android:text="NIK"
   	    />
-     <TextView 
-        android:id="@+id/textViewStatus"
-    	android:layout_width="fill_parent" 
-    	android:layout_height="wrap_content"   
-    	android:layout_alignParentLeft="true"
-    	android:layout_below="@id/editTextNIK"
-        />
+    
      <Button 
         android:id="@+id/buttonConnect"
         android:text="Connect"
     	android:layout_width="fill_parent" 
     	android:layout_height="wrap_content"   
     	android:layout_alignParentLeft="true"
-    	android:layout_below="@id/textViewStatus"
+    	android:layout_below="@id/editTextNIK"
         />
-    
+      <TextView 
+        android:id="@+id/textViewStatus"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentLeft="true"
+    	android:layout_below="@id/buttonConnect"
+        />
+  	
+  	<Button 
+  	    android:id="@+id/buttonDebugMode"
+        android:text="Debug"
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentBottom="true"
+    	android:layout_alignParentRight="true"
+  	    />
+  	<EditText 
+  	    android:id="@+id/editTextDebugVerification"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_toLeftOf="@id/buttonDebugMode"
+    	android:layout_alignParentBottom="true"
+  	    />
 
 </RelativeLayout>

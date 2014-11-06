@@ -18,6 +18,9 @@ public abstract class CommunicationPacket
 	public static final String MESSAGETYPE_ENDGAME="endgame";
 	public static final String MESSAGETYPE_REGISTER="register";
 	public static final String MESSAGETYPE_CONFIRM="confirm";
+	public static final String MESSAGETYPE_KILLED="killed";
+	public static final String MESSAGETYPE_PING="ping";
+	public static final String MESSAGETYPE_PONG="pong";
 	
 	protected JsonWriter jsonWriter;
 	protected StringWriter stringWriter;
@@ -39,6 +42,7 @@ public abstract class CommunicationPacket
 				keyValueHashmap.put(jsonReader.nextName(), jsonReader.nextString());
 			}
 			jsonReader.endObject();
+			jsonReader.close();
 		} 
 		catch (IOException e) 
 		{
@@ -54,6 +58,14 @@ public abstract class CommunicationPacket
 		else if (type.equals(MESSAGETYPE_ENDGAME))
 		{
 			return new EndGamePacket();
+		}
+		else if (type.equals(MESSAGETYPE_KILLED))
+		{
+			return new KilledPacket();
+		}
+		else if (type.equals(MESSAGETYPE_PONG))
+		{
+			return new PingPongPacket(MESSAGETYPE_PONG,Integer.valueOf(keyValueHashmap.get(PingPongPacket.NAME_SENTTIME).toString()),Integer.valueOf(keyValueHashmap.get(PingPongPacket.NAME_PACKETID).toString()));
 		}
 		//String type=jsonReader.
 		return null;
