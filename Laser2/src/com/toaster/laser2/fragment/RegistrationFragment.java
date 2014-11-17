@@ -9,8 +9,10 @@ import com.toaster.laser2.R.layout;
 import com.toaster.laser2.laser2controller.Laser2Controller;
 
 import android.os.Bundle;
+import android.provider.Telephony.TextBasedSmsColumns;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,8 +43,8 @@ public class RegistrationFragment extends Fragment implements OnClickListener
 		this.buttonDebugMode=(Button)mainView.findViewById(R.id.buttonDebugMode);
 		this.buttonConnect.setOnClickListener(this);
 		this.buttonDebugMode.setOnClickListener(this);
-		Bundle registrationBundle=this.getArguments();
-		this.setErrorStatus((ArrayList<String>)registrationBundle.get("errorList"));
+		//Bundle registrationBundle=this.getArguments();
+		//this.setErrorStatus((ArrayList<String>)registrationBundle.get("errorList"));
 		return mainView;
 	}
 	
@@ -61,7 +63,12 @@ public class RegistrationFragment extends Fragment implements OnClickListener
 				buffer.append(errorList.get(i)+"\n");
 			}
 			textViewStatus.setText(buffer.toString());
-			this.buttonConnect.setEnabled(false);
+			//this.buttonConnect.setEnabled(false);
+			
+		}
+		else
+		{
+			textViewStatus.setText("");
 		}
 	}
 	

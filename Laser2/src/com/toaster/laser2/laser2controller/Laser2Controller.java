@@ -2,8 +2,12 @@ package com.toaster.laser2.laser2controller;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 
+import com.bluno.BlunoConnection;
+import com.bluno.BlunoConnection.connectionStateEnum;
+import com.bluno.BlunoHandler;
 import com.google.android.gms.common.ConnectionResult;
 import com.toaster.internalsensor.InternalSensorController;
 import com.toaster.internalsensor.InternalSensorHandler;
@@ -17,13 +21,16 @@ import com.toaster.laser2.communicationpacket.RegistrationPacket;
 import com.toaster.laser2.communicationpacket.UpdatePacket;
 import com.toaster.laser2.locationcontroller.LocationController;
 import com.toaster.laser2.locationcontroller.LocationControllerHandler;
+import com.toaster.laser2.storage.StorageController;
 import com.toaster.udpcommunication.IMessageHandler;
 import com.toaster.udpcommunication.UDPPacketManager;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
-public class Laser2Controller implements LocationControllerHandler, IMessageHandler, InternalSensorHandler
+public class Laser2Controller implements LocationControllerHandler, IMessageHandler, InternalSensorHandler,BlunoHandler
 {
 	protected final static int STATE_DISCONNECTED = 0;
 	protected final static int STATE_CONNECTED = 1;
@@ -35,14 +42,21 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	protected final static long MINIMUM_CONNECTION_RETRY_INTERVAL = 2000;
 	protected final static int MAX_CONNECTION_RETRY_ATTEMPT = 5;
 
+	protected final static int BLUNODATAIDX_GUNID=0;
+	protected final static int BLUNODATAIDX_COUNTER=1;
+	protected final static int BLUNODATAIDX_SENSORID=2;
+	
 	// protected CommunicationPacket commPacket;
 	protected int state;
 	protected LocationController locController;
 	protected UDPPacketManager commManager;
 	protected InternalSensorController internalSensor;
+	protected StorageController storageController;
+	protected BlunoConnection blunoConnection;
 	protected Location currentLocation;
 	protected UIHandler ui;
 	protected InetAddress serverAddress;
+	protected String sensorBTAddress;
 	protected String gameId;
 	protected String nomorInduk;
 	protected int androidId;
@@ -54,13 +68,48 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	protected int connectionAttemptCount;
 	protected boolean playerAlive;
 	protected boolean debugMode = false;
-
+	protected int[] lastSensorData;
+	protected long lastSensorDataTime;
+	
+	protected StringBuffer debugStringBuffer;
+	
 	public Laser2Controller(Context context, UIHandler ui)
 	{
 		this.commManager = UDPPacketManager.createBroadcastUDPManager(this, context, UDP_TARGETPORT, UDP_RECEIVEPORT);
 		this.locController = new LocationController(context, this);
 		this.internalSensor = new InternalSensorController(context, this);
+		this.storageController=new StorageController(context);
+		this.blunoConnection=new BlunoConnection(context, this);
+		this.sensorBTAddress=storageController.getSensorAddress();
 		this.errorList = new ArrayList<String>();
+		this.sensorBTAddress=storageController.getSensorAddress();
+		if (this.sensorBTAddress!=null)
+			blunoConnection.connect(sensorBTAddress);
+		Log.v(this.getClass().getName(), sensorBTAddress);
+		this.ui = ui;
+		this.pose = PoseCalculator.POSE_STANDING;
+		this.state = STATE_DISCONNECTED;
+		this.androidId = -1;
+		this.checkPrerequisites();
+		this.ui.updateErrorStatus(errorList);
+		this.lastSensorData=new int[3];
+		this.lastSensorDataTime=-1;
+		this.debugStringBuffer=new StringBuffer();
+	}
+
+	protected void checkPrerequisites()
+	{
+		this.errorList.clear();
+		Log.v(this.getClass().getName(), "btstate="+blunoConnection.getConnectionState());
+		Log.v(this.getClass().getName(), "bterr="+(blunoConnection.getConnectionState()!=connectionStateEnum.isConnected));
+		if (sensorBTAddress==null)
+		{
+			this.errorList.add("Belum dipair dengan sensor");
+		}
+		else if (blunoConnection.getConnectionState()!=connectionStateEnum.isConnected)
+		{
+			this.errorList.add("Belum terkoneksi dengan sensor");
+		}
 		if (!this.locController.getStatus())
 		{
 			if (this.locController.getErrorCode() == ConnectionResult.SERVICE_MISSING)
@@ -88,12 +137,8 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 				this.errorList.add("Tipe sensor MAGNETIC tidak tersedia");
 			}
 		}
-		this.ui = ui;
-		this.pose = PoseCalculator.POSE_STANDING;
-		this.state = STATE_DISCONNECTED;
-		this.androidId = -1;
 	}
-
+	
 	protected String createConnectionAttemptStatusString(boolean failed, int count)
 	{
 		if (failed)
@@ -114,18 +159,22 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 
 	protected String generateDebugString()
 	{
-		StringBuffer result = new StringBuffer();
-		result.append("AndroidId = " + this.androidId + "\n");
-		result.append("ServerAddress = " + this.serverAddress + "\n");
+		debugStringBuffer.setLength(0);
+		debugStringBuffer.append("AndroidId = " + this.androidId + "\n");
+		debugStringBuffer.append("ServerAddress = " + this.serverAddress + "\n");
 		if (this.currentLocation != null)
 		{
-			result.append("Latitude = " + Location.convert(this.currentLocation.getLatitude(), Location.FORMAT_DEGREES) + "\n");
-			result.append("Longitude = " + Location.convert(this.currentLocation.getLongitude(), Location.FORMAT_DEGREES) + "\n");
-			result.append("Accuracy = " + this.currentLocation.getAccuracy() + "\n");
+			debugStringBuffer.append("Latitude = " + Location.convert(this.currentLocation.getLatitude(), Location.FORMAT_DEGREES) + "\n");
+			debugStringBuffer.append("Longitude = " + Location.convert(this.currentLocation.getLongitude(), Location.FORMAT_DEGREES) + "\n");
+			debugStringBuffer.append("Accuracy = " + this.currentLocation.getAccuracy() + "\n");
 		}
-		result.append("Azimuth = " + this.azimuth + "\n");
-		result.append("Pose = " + this.pose + "\n");
-		return result.toString();
+		debugStringBuffer.append("Azimuth = " + this.azimuth + "\n");
+		debugStringBuffer.append("Pose = " + this.pose + "\n");
+		debugStringBuffer.append("Last sensor Data: "+lastSensorDataTime+"\n");
+		debugStringBuffer.append("SensorData-GunId:"+lastSensorData[BLUNODATAIDX_GUNID]+"\n");
+		debugStringBuffer.append("SensorData-Counter:"+lastSensorData[BLUNODATAIDX_COUNTER]+"\n");
+		debugStringBuffer.append("SensorData-SensorId:"+lastSensorData[BLUNODATAIDX_SENSORID]+"\n");
+		return debugStringBuffer.toString();
 	}
 
 	public ArrayList<String> getErrorList()
@@ -229,6 +278,43 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 		byte[] buffer = regPacket.getAsByteArray();
 		this.commManager.broadcast(buffer, 0, buffer.length, 0);
 	}
+	
+	/*
+	protected void sendHitMessage()
+	{
+		HitPacket hitPacket=new HitPacket();
+		hitPacket.location = this.currentLocation;
+		hitPacket.id = Integer.toString(this.androidId);
+		hitPacket.action = UpdatePacket.ACTIONTYPE_UPDATE;
+		hitPacket.heading = Math.round(this.azimuth);
+		if (this.playerAlive==true)
+		{
+			if (this.pose == PoseCalculator.POSE_PRONE)
+			{
+				hitPacket.state = UpdatePacket.STATE_ALIVECRAWL;
+			}
+			else
+			{
+				hitPacket.state = UpdatePacket.STATE_ALIVESTAND;
+			}
+		}
+		else 
+		{
+			if (this.pose == PoseCalculator.POSE_PRONE)
+			{
+				hitPacket.state = UpdatePacket.STATE_DEADCRAWL;
+			}
+			else
+			{
+				hitPacket.state = UpdatePacket.STATE_DEADSTAND;
+			}
+		}
+		hitPacket.idSenjata=lastSensorData[BLUNODATAIDX_GUNID];
+		hitPacket.idSenjata=lastSensorData[BLUNODATAIDX_GUNID];
+		hitPacket.idSenjata=lastSensorData[BLUNODATAIDX_GUNID];
+		byte[] buffer = hitPacket.getAsByteArray();
+		this.commManager.send(buffer, 0, buffer.length, 0, this.serverAddress);
+	}*/
 
 	protected void sendUpdate()
 	{
@@ -318,10 +404,10 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 
 	public void simulateHit(int idSenjata, int counter)
 	{
-		this.sendHitUpdate(idSenjata, counter);
+		this.sendHitUpdate(idSenjata, counter,0);
 	}
 
-	protected void sendHitUpdate(int idSenjata, int counter)
+	protected void sendHitUpdate(int idSenjata, int counter,int sensorId)
 	{
 		HitPacket commPacket = new HitPacket();
 		commPacket.location = this.currentLocation;
@@ -342,4 +428,47 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 		this.commManager.send(buffer, 0, buffer.length, 0, this.serverAddress);
 	}
 
+	@Override
+	public void onDataReceived(String strGunId, String strCounter, String strSensorId)
+	{
+		// TODO Auto-generated method stub
+		this.lastSensorData[BLUNODATAIDX_GUNID]=Integer.parseInt(strGunId);
+		this.lastSensorData[BLUNODATAIDX_COUNTER]=Integer.parseInt(strCounter);
+		this.lastSensorData[BLUNODATAIDX_SENSORID]=Integer.parseInt(strSensorId);
+		this.lastSensorDataTime=System.currentTimeMillis();
+		if (this.state == STATE_CONNECTED)
+		{
+			this.sendHitUpdate(this.lastSensorData[BLUNODATAIDX_GUNID], this.lastSensorData[BLUNODATAIDX_COUNTER], this.lastSensorData[BLUNODATAIDX_SENSORID]);
+		}
+	}
+
+	@Override
+	public void onConnectionStateChange(connectionStateEnum theconnectionStateEnum)
+	{
+		this.checkPrerequisites();
+		this.ui.updateErrorStatus(errorList);
+	}
+
+	@Override
+	public void onScanCompleted(ArrayList<BluetoothDevice> deviceList)
+	{
+		ui.setFoundBTDevices(deviceList);
+		Log.v(this.getClass().getName(), "scan completed");
+	}
+	
+	public void setBTPairAddress(String address)
+	{
+		this.sensorBTAddress=address;
+		this.storageController.saveSensorAddress(address);
+	}
+	
+	public String getBTPairAddress()
+	{
+		return this.storageController.getSensorAddress();
+	}
+	
+	public void startBTScan()
+	{
+		blunoConnection.scanForBleDevices();
+	}
 }

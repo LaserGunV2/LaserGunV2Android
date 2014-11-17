@@ -1461,6 +1461,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int PingLayout=0x7f08005d;
+        public static final int ScanBTDevicesLayout=0x7f080060;
         public static final int SimulateShotByLayout=0x7f080057;
         public static final int action_bar=0x7f08002e;
         public static final int action_bar_activity_content=0x7f080027;
@@ -1470,20 +1471,21 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f080035;
         public static final int action_bar_title=0x7f080034;
         public static final int action_context_bar=0x7f08002f;
-        public static final int action_exit=0x7f080069;
+        public static final int action_exit=0x7f08006d;
         public static final int action_menu_divider=0x7f080028;
         public static final int action_menu_presenter=0x7f080029;
         public static final int action_mode_close_button=0x7f080036;
         public static final int activity_chooser_view_content=0x7f080037;
         public static final int always=0x7f08001e;
-        public static final int androidIdLabel=0x7f080060;
+        public static final int androidIdLabel=0x7f080064;
         public static final int beginning=0x7f080023;
         public static final int book_now=0x7f080010;
-        public static final int buttonConnect=0x7f080065;
+        public static final int buttonConnect=0x7f080069;
         public static final int buttonConnect_debug=0x7f080053;
-        public static final int buttonDebugMode=0x7f080067;
+        public static final int buttonDebugMode=0x7f08006b;
         public static final int buttonDisconnect_debug=0x7f080054;
         public static final int buttonPing=0x7f08005e;
+        public static final int buttonScan=0x7f080061;
         public static final int buttonSimulateShotBy=0x7f08005a;
         public static final int buyButton=0x7f08000a;
         public static final int buy_now=0x7f08000f;
@@ -1495,10 +1497,10 @@ containing a value of this type.
         public static final int dialog=0x7f080021;
         public static final int disableHome=0x7f08001b;
         public static final int dropdown=0x7f080022;
-        public static final int editTextDebugVerification=0x7f080068;
-        public static final int editTextGameId=0x7f080062;
+        public static final int editTextDebugVerification=0x7f08006c;
+        public static final int editTextGameId=0x7f080066;
         public static final int editTextGameId_debug=0x7f080050;
-        public static final int editTextNIK=0x7f080063;
+        public static final int editTextNIK=0x7f080067;
         public static final int editTextNIK_debug=0x7f080051;
         public static final int editTextShooterBulletCounter=0x7f08005c;
         public static final int editTextShooterGunId=0x7f080059;
@@ -1516,13 +1518,14 @@ containing a value of this type.
         public static final int icon=0x7f08003c;
         public static final int ifRoom=0x7f08001d;
         public static final int image=0x7f080039;
-        public static final int labelGameId=0x7f080061;
+        public static final int labelGameId=0x7f080065;
         public static final int labelGameId_debug=0x7f08004f;
-        public static final int labelNIK=0x7f080064;
+        public static final int labelNIK=0x7f080068;
         public static final int labelNIK_debug=0x7f080052;
         public static final int labelShooterBulletCounter=0x7f08005b;
         public static final int labelShooterGunId=0x7f080058;
         public static final int listMode=0x7f080014;
+        public static final int listViewBTAddress=0x7f080063;
         public static final int list_item=0x7f08003b;
         public static final int match_parent=0x7f08000c;
         public static final int middle=0x7f080024;
@@ -1556,8 +1559,9 @@ containing a value of this type.
         public static final int submit_area=0x7f08004b;
         public static final int tabMode=0x7f080015;
         public static final int terrain=0x7f080003;
+        public static final int textViewCurrentBTPairAddress=0x7f080062;
         public static final int textViewDebugOutput=0x7f080056;
-        public static final int textViewStatus=0x7f080066;
+        public static final int textViewStatus=0x7f08006a;
         public static final int textViewStatus_debug=0x7f080055;
         public static final int textviewPingResult=0x7f08005f;
         public static final int title=0x7f08003d;

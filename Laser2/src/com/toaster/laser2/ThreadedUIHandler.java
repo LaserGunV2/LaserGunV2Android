@@ -1,5 +1,8 @@
 package com.toaster.laser2;
 
+import java.util.ArrayList;
+
+import android.bluetooth.BluetoothDevice;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -13,6 +16,8 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 	protected static final int MSG_setStatus=4;
 	protected static final int MSG_setDebugStatus=5;
 	protected static final int MSG_setPlayerAliveStatus=6;
+	protected static final int MSG_setFoundBTDevices=7;
+	protected static final int MSG_updateErrorStatus=8;
 	
 	protected UIHandler actualUI;
 	
@@ -68,6 +73,16 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 				actualUI.setPlayerAliveStatus(par.booleanValue());
 			}
 			break;
+			case MSG_setFoundBTDevices:
+			{
+				actualUI.setFoundBTDevices((ArrayList<BluetoothDevice>)msg.obj);
+			}
+			break;
+			case MSG_updateErrorStatus:
+			{
+				actualUI.updateErrorStatus((ArrayList<String>)msg.obj);
+			}
+			break;
 		}
 	}
 
@@ -109,6 +124,18 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 	{
 		(this.obtainMessage(MSG_setPlayerAliveStatus,Boolean.valueOf(isPlayerAlive))).sendToTarget();
 		
+	}
+
+	@Override
+	public void setFoundBTDevices(ArrayList<BluetoothDevice> deviceList)
+	{
+		(this.obtainMessage(MSG_setFoundBTDevices,deviceList)).sendToTarget();
+	}
+
+	@Override
+	public void updateErrorStatus(ArrayList<String> errorList)
+	{
+		(this.obtainMessage(MSG_updateErrorStatus,errorList)).sendToTarget();
 	}
 	
 	

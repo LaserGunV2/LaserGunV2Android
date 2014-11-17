@@ -8,9 +8,11 @@ import android.util.JsonWriter;
 public class HitPacket extends UpdatePacket {
 	protected static final String NAME_IDSENJATA="idsenjata";
 	protected static final String NAME_COUNTER="counter";
+	protected static final String NAME_SENSORID="sensor";
 	
 	public int idSenjata;
 	public int counter;
+	public int sensorId;
 	
 	public HitPacket()
 	{

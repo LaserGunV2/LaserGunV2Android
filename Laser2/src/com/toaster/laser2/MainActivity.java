@@ -1,5 +1,7 @@
 package com.toaster.laser2;
 
+import java.util.ArrayList;
+
 import com.toaster.laser2.fragment.DebugFragment;
 import com.toaster.laser2.fragment.GameFragment;
 import com.toaster.laser2.fragment.RegistrationFragment;
@@ -8,8 +10,10 @@ import com.toaster.laser2.laser2controller.Laser2Controller;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,9 +67,9 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		
 		setUIMode(UIMODE_REGISTRATION);
 		
-		Bundle registrationBundle=new Bundle();
-		registrationBundle.putSerializable("errorList", mainController.getErrorList());
-		registrationFragment.setArguments(registrationBundle);
+		//Bundle registrationBundle=new Bundle();
+		//registrationBundle.putSerializable("errorList", mainController.getErrorList());
+		//registrationFragment.setArguments(registrationBundle);
 	}
 
 	@Override
@@ -162,6 +166,20 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 	{
 		gameFragment.setPlayerAliveStatus(isPlayerAlive);
 		debugFragment.setPlayerAliveStatus(isPlayerAlive);
+	}
+
+	@Override
+	public void setFoundBTDevices(ArrayList<BluetoothDevice> deviceList)
+	{
+		debugFragment.setFoundBTDevices(deviceList);
+		Log.v(this.getClass().getName(),"bt scan completed");
+	}
+
+	@Override
+	public void updateErrorStatus(ArrayList<String> errorList)
+	{
+		registrationFragment.setErrorStatus(errorList);
+		
 	}
 
 }

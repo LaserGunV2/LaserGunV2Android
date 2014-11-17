@@ -1,5 +1,9 @@
 package com.toaster.laser2;
 
+import java.util.ArrayList;
+
+import android.bluetooth.BluetoothDevice;
+
 public interface UIHandler 
 {
 	public void appendDebug(String s);
@@ -10,4 +14,6 @@ public interface UIHandler
 	public void setStatus(String status);
 	public void setDebugStatus(String debugStatus);
 	public void setPlayerAliveStatus(boolean isPlayerAlive);
+	public void setFoundBTDevices(ArrayList<BluetoothDevice> deviceList);
+	public void updateErrorStatus(ArrayList<String> errorList);
 }

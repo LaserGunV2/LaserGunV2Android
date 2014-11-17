@@ -1,8 +1,12 @@
 package com.toaster.laser2.fragment;
 
+import java.util.ArrayList;
+
+import com.google.android.gms.internal.bt;
 import com.toaster.laser2.R;
 import com.toaster.laser2.laser2controller.Laser2Controller;
 
+import android.bluetooth.BluetoothDevice;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class DebugFragment extends Fragment implements OnClickListener
+public class DebugFragment extends Fragment implements OnClickListener,OnItemClickListener
 {
 	protected EditText editTextGameId;
 	protected EditText editTextNIK;
@@ -26,9 +34,13 @@ public class DebugFragment extends Fragment implements OnClickListener
 	protected TextView textViewStatus;
 	protected TextView textViewDebugOutput;
 	protected TextView textViewPingResult;
+	protected TextView textViewPairAddress;
 	protected Laser2Controller laserController;
 	protected Button buttonSimulateHit;
 	protected Button buttonPing;
+	protected Button buttonScan;
+	protected ListView listViewFoundDevices;
+	protected ArrayAdapter<String> foundDevicesAdapter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) 
@@ -41,16 +53,23 @@ public class DebugFragment extends Fragment implements OnClickListener
 		textViewDebugOutput=(TextView)mainView.findViewById(R.id.textViewDebugOutput);
 		textViewStatus=(TextView)mainView.findViewById(R.id.textViewStatus_debug);
 		textViewPingResult=(TextView)mainView.findViewById(R.id.textviewPingResult);
+		textViewPairAddress=(TextView)mainView.findViewById(R.id.textViewCurrentBTPairAddress);
 		buttonConnect=(Button)mainView.findViewById(R.id.buttonConnect_debug);
 		buttonDisconnect=(Button)mainView.findViewById(R.id.buttonDisconnect_debug);
 		buttonSimulateHit=(Button)mainView.findViewById(R.id.buttonSimulateShotBy);
 		buttonPing=(Button)mainView.findViewById(R.id.buttonPing);
-		
+		buttonScan=(Button)mainView.findViewById(R.id.buttonScan);
+		listViewFoundDevices=(ListView)mainView.findViewById(R.id.listViewBTAddress);
+		foundDevicesAdapter=new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1);
+		listViewFoundDevices.setAdapter(foundDevicesAdapter);
 		buttonConnect.setOnClickListener(this);
 		buttonDisconnect.setOnClickListener(this);
 		buttonSimulateHit.setOnClickListener(this);
 		buttonPing.setOnClickListener(this);
+		buttonScan.setOnClickListener(this);
 		
+		listViewFoundDevices.setOnItemClickListener(this);
+		//foundDevicesAdapter.add("abc");
 		return mainView;
 	}
 	
@@ -91,6 +110,10 @@ public class DebugFragment extends Fragment implements OnClickListener
 		{
 			
 		}
+		else if (objButton==buttonScan)
+		{
+			laserController.startBTScan();
+		}
 	}
 	
 	public void setPlayerAliveStatus(boolean isPlayerAlive)
@@ -99,5 +122,20 @@ public class DebugFragment extends Fragment implements OnClickListener
 			textViewDebugOutput.setBackgroundColor(Color.WHITE);
 		else
 			textViewDebugOutput.setBackgroundColor(Color.RED);
+	}
+
+	public void setFoundBTDevices(ArrayList<BluetoothDevice> deviceList) 
+	{
+		for (BluetoothDevice device:deviceList)
+		{
+			foundDevicesAdapter.add(device.getAddress());
+		}
+	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> listView, View item, int index, long id)
+	{
+		laserController.setBTPairAddress(foundDevicesAdapter.getItem(index));
+		System.out.println("saving bt address");
 	}
 }
