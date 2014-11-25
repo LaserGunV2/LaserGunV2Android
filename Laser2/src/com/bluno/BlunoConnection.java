@@ -119,6 +119,7 @@ public class BlunoConnection implements LeScanCallback{
             else if (BLEService.ACTION_DATA_AVAILABLE.equals(action)) {
             	if(mSCharacteristic==mModelNumberCharacteristic)
             	{
+            		Log.v(TAG, intent.getStringExtra(BLEService.EXTRA_DATA));
             		if (intent.getStringExtra(BLEService.EXTRA_DATA).toUpperCase().startsWith("DF BLUNO")) {
 						mBluetoothLeService.setCharacteristicNotification(mSCharacteristic, false);
 						mSCharacteristic=mCommandCharacteristic;
@@ -199,23 +200,26 @@ public class BlunoConnection implements LeScanCallback{
 	
 	@Override
 	public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-		System.out.println("mLeScanCallback onLeScan run ");
-		addDevice(device);
-		if(device.getAddress().equalsIgnoreCase(deviceAddress)){
-			this.bleDevice = device;
-			if (mBluetoothLeService.connect(bleDevice.getAddress())) {
-		        Log.d(TAG, "Connect request success");
-	        	mConnectionState=connectionStateEnum.isConnected;
-	        	onConnectionStateChange(mConnectionState);
-	            handler.postDelayed(mConnectingOverTimeRunnable, 10000);
-	            
-        	}
-	        else {
-		        Log.d(TAG, "Connect request fail");
-	        	mConnectionState=connectionStateEnum.isToScan;
-	        	onConnectionStateChange(mConnectionState);
+		Log.d(TAG, "onLeScan");
+		if (mConnectionState!=connectionStateEnum.isConnected)
+		{
+			//addDevice(device);
+			if(device.getAddress().equalsIgnoreCase(deviceAddress)){
+				this.bleDevice = device;
+				if (mBluetoothLeService.connect(bleDevice.getAddress())) {
+			        Log.d(TAG, "Connect request success");
+		        	mConnectionState=connectionStateEnum.isConnected;
+		        	onConnectionStateChange(mConnectionState);
+		            handler.postDelayed(mConnectingOverTimeRunnable, 10000);
+		            //scanLeDevice(false);
+	        	}
+		        else {
+			        Log.d(TAG, "Connect request fail");
+		        	mConnectionState=connectionStateEnum.isToScan;
+		        	onConnectionStateChange(mConnectionState);
+				}
+				//scanLeDevice(false);
 			}
-			//scanLeDevice(false);
 		}
 	}
 

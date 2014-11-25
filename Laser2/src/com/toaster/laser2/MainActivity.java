@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.toaster.laser2.fragment.DebugFragment;
 import com.toaster.laser2.fragment.GameFragment;
+import com.toaster.laser2.fragment.PreferencesFragment;
 import com.toaster.laser2.fragment.RegistrationFragment;
 import com.toaster.laser2.laser2controller.Laser2Controller;
 
@@ -27,7 +28,8 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 {
 	public static final int UIMODE_REGISTRATION=0;
 	public static final int UIMODE_GAME=1;
-	public static final int UIMODE_DEBUG=2;
+	public static final int UIMODE_PREFERENCES=2;
+	public static final int UIMODE_DEBUG=3;
 	
 	protected ThreadedUIHandler uiHandler;
 	//protected TextView debugView;
@@ -36,6 +38,7 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 	protected RegistrationFragment registrationFragment;
 	protected GameFragment gameFragment;
 	protected DebugFragment debugFragment;
+	protected PreferencesFragment preferencesFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -54,6 +57,8 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		this.gameFragment.setController(mainController);
 		this.debugFragment=new DebugFragment();
 		this.debugFragment.setController(mainController);
+		this.preferencesFragment=new PreferencesFragment();
+		this.preferencesFragment.setController(mainController);
 		
 		mainView.setKeepScreenOn(true);
 	
@@ -63,6 +68,7 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		fragTrans.add(R.id.fragContainer, registrationFragment);
 		fragTrans.add(R.id.fragContainer, gameFragment);
 		fragTrans.add(R.id.fragContainer, debugFragment);
+		fragTrans.add(R.id.fragContainer , preferencesFragment);
 		fragTrans.commit();
 		
 		setUIMode(UIMODE_REGISTRATION);
@@ -98,6 +104,10 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		else if (mode==UIMODE_DEBUG)
 		{
 			fragTrans.show(debugFragment);
+		}
+		else if (mode==UIMODE_PREFERENCES)
+		{
+			fragTrans.show(preferencesFragment);
 		}
 		fragTrans.commit();
 		//untuk hide keyboard sehabis pencet connect
@@ -180,6 +190,12 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 	{
 		registrationFragment.setErrorStatus(errorList);
 		
+	}
+
+	@Override
+	public void btDeviceFound(BluetoothDevice foundDevice)
+	{
+		preferencesFragment.onBTDeviceFound(foundDevice);
 	}
 
 }

@@ -156,7 +156,7 @@
 	    	android:layout_height="wrap_content"   
 	    	android:layout_toRightOf="@id/buttonPing"
 	    	android:layout_alignBaseline="@id/buttonPing"
-	  	    android:text=""
+	  	    android:text="ping result"
   	    />
 		
     </RelativeLayout>

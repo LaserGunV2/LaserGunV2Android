@@ -3,6 +3,7 @@ package com.toaster.laser2.fragment;
 import java.util.ArrayList;
 import java.util.ResourceBundle.Control;
 
+import com.toaster.laser2.MainActivity;
 import com.toaster.laser2.R;
 import com.toaster.laser2.R.id;
 import com.toaster.laser2.R.layout;
@@ -29,6 +30,9 @@ public class RegistrationFragment extends Fragment implements OnClickListener
 	protected Button buttonConnect;
 	protected EditText editTextDebugMode;
 	protected Button buttonDebugMode;
+	protected EditText editTextPreferences;
+	protected Button buttonPreferences;
+	
 	protected Laser2Controller laserController;
 	
 	@Override
@@ -39,10 +43,13 @@ public class RegistrationFragment extends Fragment implements OnClickListener
 		this.editTextNIK=(EditText)mainView.findViewById(R.id.editTextNIK);
 		this.textViewStatus=(TextView)mainView.findViewById(R.id.textViewStatus);
 		this.editTextDebugMode=(EditText)mainView.findViewById(R.id.editTextDebugVerification);
+		this.editTextPreferences=(EditText)mainView.findViewById(R.id.editTextPreferenceVerification);
 		this.buttonConnect=(Button)mainView.findViewById(R.id.buttonConnect);
 		this.buttonDebugMode=(Button)mainView.findViewById(R.id.buttonDebugMode);
+		this.buttonPreferences=(Button)mainView.findViewById(R.id.buttonPreferences);
 		this.buttonConnect.setOnClickListener(this);
 		this.buttonDebugMode.setOnClickListener(this);
+		this.buttonPreferences.setOnClickListener(this);
 		//Bundle registrationBundle=this.getArguments();
 		//this.setErrorStatus((ArrayList<String>)registrationBundle.get("errorList"));
 		return mainView;
@@ -89,7 +96,12 @@ public class RegistrationFragment extends Fragment implements OnClickListener
 		else if (objButton==buttonDebugMode)
 		{
 			if (this.editTextDebugMode.getText().toString().toLowerCase().equals("debug"))
-				this.laserController.enableDebugMode();
+				this.laserController.setUIMode(MainActivity.UIMODE_DEBUG);
+		}
+		else if (objButton==buttonPreferences)
+		{
+			if (this.editTextPreferences.getText().toString().equalsIgnoreCase("preferences"))
+				this.laserController.setUIMode(MainActivity.UIMODE_PREFERENCES);
 		}
 	}
 	

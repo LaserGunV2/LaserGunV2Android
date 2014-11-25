@@ -39,7 +39,10 @@ public class BlunoScanner implements LeScanCallback
 	public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord)
 	{
 		if (!this.deviceList.contains(device))
+		{
 			deviceList.add(device);
+			handler.onBTDeviceFound(device);
+		}
 	}
 	
 	public void onScanCompleted()

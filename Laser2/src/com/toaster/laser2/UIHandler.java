@@ -15,5 +15,6 @@ public interface UIHandler
 	public void setDebugStatus(String debugStatus);
 	public void setPlayerAliveStatus(boolean isPlayerAlive);
 	public void setFoundBTDevices(ArrayList<BluetoothDevice> deviceList);
+	public void btDeviceFound(BluetoothDevice foundDevice);
 	public void updateErrorStatus(ArrayList<String> errorList);
 }

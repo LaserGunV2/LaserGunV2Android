@@ -2,7 +2,6 @@ package com.toaster.laser2.laser2controller;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Timer;
 
 import com.bluno.BlunoConnection;
@@ -85,7 +84,7 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 		this.sensorBTAddress=storageController.getSensorAddress();
 		if (this.sensorBTAddress!=null)
 			blunoConnection.connect(sensorBTAddress);
-		Log.v(this.getClass().getName(), sensorBTAddress);
+		//Log.v(this.getClass().getName(), sensorBTAddress);
 		this.ui = ui;
 		this.pose = PoseCalculator.POSE_STANDING;
 		this.state = STATE_DISCONNECTED;
@@ -100,8 +99,8 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	protected void checkPrerequisites()
 	{
 		this.errorList.clear();
-		Log.v(this.getClass().getName(), "btstate="+blunoConnection.getConnectionState());
-		Log.v(this.getClass().getName(), "bterr="+(blunoConnection.getConnectionState()!=connectionStateEnum.isConnected));
+		//Log.v(this.getClass().getName(), "btstate="+blunoConnection.getConnectionState());
+		//Log.v(this.getClass().getName(), "bterr="+(blunoConnection.getConnectionState()!=connectionStateEnum.isConnected));
 		if (sensorBTAddress==null)
 		{
 			this.errorList.add("Belum dipair dengan sensor");
@@ -151,11 +150,22 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 		}
 	}
 
-	public void enableDebugMode()
+//	public void enableDebugMode()
+//	{
+//		this.debugMode=true;
+//		this.ui.setUIMode(MainActivity.UIMODE_DEBUG);
+//	}
+//	
+	public void setUIMode(int uiMode)
 	{
-		this.debugMode=true;
-		this.ui.setUIMode(MainActivity.UIMODE_DEBUG);
+		if (uiMode==MainActivity.UIMODE_DEBUG)
+		{
+			this.debugMode=true;
+		}
+		this.ui.setUIMode(uiMode);
 	}
+	
+	
 
 	protected String generateDebugString()
 	{
@@ -460,6 +470,9 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	{
 		this.sensorBTAddress=address;
 		this.storageController.saveSensorAddress(address);
+		this.sensorBTAddress=address;
+		if (this.sensorBTAddress!=null)
+			blunoConnection.connect(sensorBTAddress);
 	}
 	
 	public String getBTPairAddress()
@@ -470,5 +483,12 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	public void startBTScan()
 	{
 		blunoConnection.scanForBleDevices();
+	}
+
+	@Override
+	public void onBTDeviceFound(BluetoothDevice foundDevice)
+	{
+		ui.btDeviceFound(foundDevice);
+		
 	}
 }

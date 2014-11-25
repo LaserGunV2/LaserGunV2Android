@@ -18,6 +18,7 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 	protected static final int MSG_setPlayerAliveStatus=6;
 	protected static final int MSG_setFoundBTDevices=7;
 	protected static final int MSG_updateErrorStatus=8;
+	protected static final int MSG_btDeviceFound=9;
 	
 	protected UIHandler actualUI;
 	
@@ -83,6 +84,11 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 				actualUI.updateErrorStatus((ArrayList<String>)msg.obj);
 			}
 			break;
+			case MSG_btDeviceFound:
+			{
+				actualUI.btDeviceFound((BluetoothDevice)msg.obj);
+			}
+			break;
 		}
 	}
 
@@ -136,6 +142,13 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 	public void updateErrorStatus(ArrayList<String> errorList)
 	{
 		(this.obtainMessage(MSG_updateErrorStatus,errorList)).sendToTarget();
+	}
+
+	@Override
+	public void btDeviceFound(BluetoothDevice foundDevice)
+	{
+		(this.obtainMessage(MSG_btDeviceFound,foundDevice)).sendToTarget();
+		
 	}
 	
 	

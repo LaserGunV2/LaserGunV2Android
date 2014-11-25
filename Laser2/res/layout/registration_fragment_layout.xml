@@ -54,13 +54,29 @@
     	android:layout_alignParentLeft="true"
     	android:layout_below="@id/buttonConnect"
         />
+      
+    <Button 
+  	    android:id="@+id/buttonPreferences"
+        android:text="Preferences"
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content"   
+    	android:layout_alignParentBottom="true"
+    	android:layout_alignParentRight="true"
+  	    />
+  	<EditText 
+  	    android:id="@+id/editTextPreferenceVerification"
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"   
+    	android:layout_toLeftOf="@id/buttonPreferences"
+    	android:layout_alignParentBottom="true"
+  	    />
   	
   	<Button 
   	    android:id="@+id/buttonDebugMode"
         android:text="Debug"
     	android:layout_width="wrap_content" 
     	android:layout_height="wrap_content"   
-    	android:layout_alignParentBottom="true"
+    	android:layout_above="@id/buttonPreferences"
     	android:layout_alignParentRight="true"
   	    />
   	<EditText 
@@ -68,7 +84,7 @@
     	android:layout_width="fill_parent" 
     	android:layout_height="wrap_content"   
     	android:layout_toLeftOf="@id/buttonDebugMode"
-    	android:layout_alignParentBottom="true"
+    	android:layout_alignBottom="@+id/buttonDebugMode"
   	    />
 
 </RelativeLayout>
