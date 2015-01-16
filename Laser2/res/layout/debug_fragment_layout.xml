@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+<!-- <ScrollView xmlns:android="http://schemas.android.com/apk/res/android" -->
+<!--     android:layout_width="fill_parent" -->
+<!--     android:layout_height="wrap_content"> -->
 
-<RelativeLayout 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
@@ -130,67 +130,74 @@
 	    	android:layout_alignParentRight="true"
 	    	android:layout_alignParentTop="true"
         />
-		
+	 	
     </RelativeLayout>
-      
-    <RelativeLayout 
-        android:id="@+id/PingLayout"
+   <Button 
+	    android:id="@+id/debug_buttonBack"
+	    android:text="Back"
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"   
+		android:layout_alignParentBottom="true"
 		android:layout_alignParentLeft="true"
-		android:layout_below="@id/SimulateShotByLayout">
+      />
+<!--     <RelativeLayout  -->
+<!--         android:id="@+id/PingLayout" -->
+<!-- 		android:layout_width="fill_parent"  -->
+<!-- 		android:layout_height="wrap_content"    -->
+<!-- 		android:layout_alignParentLeft="true" -->
+<!-- 		android:layout_below="@id/SimulateShotByLayout"> -->
 		
-		<Button 
-	        android:id="@+id/buttonPing"
-	        android:text="Ping"
-	    	android:layout_width="wrap_content" 
-	    	android:layout_height="wrap_content"   
-	    	android:layout_alignParentLeft="true"
-	    	android:layout_alignParentTop="true"
-        />
+<!-- 		<Button  -->
+<!-- 	        android:id="@+id/buttonPing" -->
+<!-- 	        android:text="Ping" -->
+<!-- 	    	android:layout_width="wrap_content"  -->
+<!-- 	    	android:layout_height="wrap_content"    -->
+<!-- 	    	android:layout_alignParentLeft="true" -->
+<!-- 	    	android:layout_alignParentTop="true" -->
+<!--         /> -->
 		
-		<TextView 
-	  	    android:id="@+id/textviewPingResult"
-	  	    android:textSize="15dp"
-	  	    android:layout_width="wrap_content" 
-	    	android:layout_height="wrap_content"   
-	    	android:layout_toRightOf="@id/buttonPing"
-	    	android:layout_alignBaseline="@id/buttonPing"
-	  	    android:text="ping result"
-  	    />
+<!-- 		<TextView  -->
+<!-- 	  	    android:id="@+id/textviewPingResult" -->
+<!-- 	  	    android:textSize="15dp" -->
+<!-- 	  	    android:layout_width="wrap_content"  -->
+<!-- 	    	android:layout_height="wrap_content"    -->
+<!-- 	    	android:layout_toRightOf="@id/buttonPing" -->
+<!-- 	    	android:layout_alignBaseline="@id/buttonPing" -->
+<!-- 	  	    android:text="ping result" -->
+<!--   	    /> -->
 		
-    </RelativeLayout>
-    <RelativeLayout 
-        android:id="@+id/ScanBTDevicesLayout"
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"   
-		android:layout_alignParentLeft="true"
-		android:layout_below="@id/PingLayout">
-		<Button 
-	        android:id="@+id/buttonScan"
-	        android:text="Scan"
-	    	android:layout_width="wrap_content" 
-	    	android:layout_height="wrap_content"   
-	    	android:layout_alignParentLeft="true"
-	    	android:layout_alignParentTop="true"
-        />
-		<TextView
-	        android:id="@+id/textViewCurrentBTPairAddress"
-	        android:text="Pair Address = "
-	    	android:layout_width="wrap_content" 
-	    	android:layout_height="wrap_content"   
-	    	android:layout_alignParentLeft="true"
-	    	android:layout_below="@id/buttonScan"
-        />
-		<ListView
-		    android:id="@+id/listViewBTAddress"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true"
-	        android:layout_below="@id/textViewCurrentBTPairAddress"
-		/>
-    </RelativeLayout>
+<!--     </RelativeLayout> -->
+<!--     <RelativeLayout  -->
+<!--         android:id="@+id/ScanBTDevicesLayout" -->
+<!-- 		android:layout_width="fill_parent"  -->
+<!-- 		android:layout_height="wrap_content"    -->
+<!-- 		android:layout_alignParentLeft="true" -->
+<!-- 		android:layout_below="@id/PingLayout"> -->
+<!-- 		<Button  -->
+<!-- 	        android:id="@+id/buttonScan" -->
+<!-- 	        android:text="Scan" -->
+<!-- 	    	android:layout_width="wrap_content"  -->
+<!-- 	    	android:layout_height="wrap_content"    -->
+<!-- 	    	android:layout_alignParentLeft="true" -->
+<!-- 	    	android:layout_alignParentTop="true" -->
+<!--         /> -->
+<!-- 		<TextView -->
+<!-- 	        android:id="@+id/textViewCurrentBTPairAddress" -->
+<!-- 	        android:text="Pair Address = " -->
+<!-- 	    	android:layout_width="wrap_content"  -->
+<!-- 	    	android:layout_height="wrap_content"    -->
+<!-- 	    	android:layout_alignParentLeft="true" -->
+<!-- 	    	android:layout_below="@id/buttonScan" -->
+<!--         /> -->
+<!-- 		<ListView -->
+<!-- 		    android:id="@+id/listViewBTAddress" -->
+<!-- 	        android:layout_width="fill_parent" -->
+<!-- 	        android:layout_height="wrap_content" -->
+<!-- 	        android:layout_alignParentLeft="true" -->
+<!-- 	        android:layout_below="@id/textViewCurrentBTPairAddress" -->
+<!-- 		/> -->
+<!--     </RelativeLayout> -->
     
 
 </RelativeLayout>
-</ScrollView>
+<!-- </ScrollView> -->

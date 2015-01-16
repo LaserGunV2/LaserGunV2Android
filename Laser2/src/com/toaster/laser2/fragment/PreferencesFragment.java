@@ -24,10 +24,13 @@ public class PreferencesFragment extends Fragment implements OnClickListener,OnI
 {
 	protected Button buttonScan;
 	protected Button buttonBack;
+	protected Button buttonToggleAzimuthCalcId;
 	protected ListView listViewFoundDevices;
 	protected ArrayAdapter<String> foundDevicesAdapter;
 	protected TextView textViewPairAddress;
 	protected Laser2Controller laserController;
+	//hrsny diambil dari preferences
+	protected int curAzimuthCalcId=1;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) 
@@ -37,11 +40,13 @@ public class PreferencesFragment extends Fragment implements OnClickListener,OnI
 		textViewPairAddress=(TextView)mainView.findViewById(R.id.preferences_textViewCurrentBTPairAddress);
 		buttonScan=(Button)mainView.findViewById(R.id.preferences_buttonScan);
 		buttonBack=(Button)mainView.findViewById(R.id.preferences_buttonBack);
+		buttonToggleAzimuthCalcId=(Button)mainView.findViewById(R.id.preferences_buttonToggleAzimuthCalcId);
 		listViewFoundDevices=(ListView)mainView.findViewById(R.id.preferences_listViewBTAddress);
 		foundDevicesAdapter=new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1);
 		listViewFoundDevices.setAdapter(foundDevicesAdapter);
 		buttonScan.setOnClickListener(this);		
 		buttonBack.setOnClickListener(this);
+		buttonToggleAzimuthCalcId.setOnClickListener(this);
 		listViewFoundDevices.setOnItemClickListener(this);
 		showPairedBTAddress();
 		return mainView;
@@ -75,11 +80,17 @@ public class PreferencesFragment extends Fragment implements OnClickListener,OnI
 		if (btn==buttonScan)
 		{
 			this.foundDevicesAdapter.clear();
-			laserController.startBTScan();
+			this.laserController.startBTScan();
 		}
 		else if (btn==buttonBack)
 		{
-			laserController.setUIMode(MainActivity.UIMODE_REGISTRATION);
+			this.laserController.setUIMode(MainActivity.UIMODE_REGISTRATION);
+		}
+		else if (btn==buttonToggleAzimuthCalcId)
+		{
+			this.curAzimuthCalcId=(this.curAzimuthCalcId+1)%2;
+			this.buttonToggleAzimuthCalcId.setText("Azimuth Calc "+this.curAzimuthCalcId);
+			this.laserController.setAzimuthCalculatorId(this.curAzimuthCalcId);
 		}
 	}
 	

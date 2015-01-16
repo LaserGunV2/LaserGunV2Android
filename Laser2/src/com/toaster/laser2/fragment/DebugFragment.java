@@ -3,6 +3,7 @@ package com.toaster.laser2.fragment;
 import java.util.ArrayList;
 
 import com.google.android.gms.internal.bt;
+import com.toaster.laser2.MainActivity;
 import com.toaster.laser2.R;
 import com.toaster.laser2.laser2controller.Laser2Controller;
 
@@ -39,8 +40,9 @@ public class DebugFragment extends Fragment implements OnClickListener,OnItemCli
 	protected Button buttonSimulateHit;
 	protected Button buttonPing;
 	protected Button buttonScan;
-	protected ListView listViewFoundDevices;
-	protected ArrayAdapter<String> foundDevicesAdapter;
+	protected Button buttonBack;
+	//protected ListView listViewFoundDevices;
+	//protected ArrayAdapter<String> foundDevicesAdapter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) 
@@ -52,23 +54,25 @@ public class DebugFragment extends Fragment implements OnClickListener,OnItemCli
 		editTextSimulatedHitCounter=(EditText)mainView.findViewById(R.id.editTextShooterBulletCounter);
 		textViewDebugOutput=(TextView)mainView.findViewById(R.id.textViewDebugOutput);
 		textViewStatus=(TextView)mainView.findViewById(R.id.textViewStatus_debug);
-		textViewPingResult=(TextView)mainView.findViewById(R.id.textviewPingResult);
-		textViewPairAddress=(TextView)mainView.findViewById(R.id.textViewCurrentBTPairAddress);
+		//textViewPingResult=(TextView)mainView.findViewById(R.id.textviewPingResult);
+		//textViewPairAddress=(TextView)mainView.findViewById(R.id.textViewCurrentBTPairAddress);
 		buttonConnect=(Button)mainView.findViewById(R.id.buttonConnect_debug);
 		buttonDisconnect=(Button)mainView.findViewById(R.id.buttonDisconnect_debug);
 		buttonSimulateHit=(Button)mainView.findViewById(R.id.buttonSimulateShotBy);
-		buttonPing=(Button)mainView.findViewById(R.id.buttonPing);
-		buttonScan=(Button)mainView.findViewById(R.id.buttonScan);
-		listViewFoundDevices=(ListView)mainView.findViewById(R.id.listViewBTAddress);
-		foundDevicesAdapter=new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1);
-		listViewFoundDevices.setAdapter(foundDevicesAdapter);
+		buttonBack=(Button)mainView.findViewById(R.id.debug_buttonBack);
+		//buttonPing=(Button)mainView.findViewById(R.id.buttonPing);
+		//buttonScan=(Button)mainView.findViewById(R.id.buttonScan);
+		//listViewFoundDevices=(ListView)mainView.findViewById(R.id.listViewBTAddress);
+		//foundDevicesAdapter=new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1);
+		//listViewFoundDevices.setAdapter(foundDevicesAdapter);
 		buttonConnect.setOnClickListener(this);
 		buttonDisconnect.setOnClickListener(this);
 		buttonSimulateHit.setOnClickListener(this);
-		buttonPing.setOnClickListener(this);
-		buttonScan.setOnClickListener(this);
+		//buttonPing.setOnClickListener(this);
+		//buttonScan.setOnClickListener(this);
+		buttonBack.setOnClickListener(this);
 		
-		listViewFoundDevices.setOnItemClickListener(this);
+		//listViewFoundDevices.setOnItemClickListener(this);
 		//foundDevicesAdapter.add("abc");
 		return mainView;
 	}
@@ -114,6 +118,13 @@ public class DebugFragment extends Fragment implements OnClickListener,OnItemCli
 		{
 			laserController.startBTScan();
 		}
+		else if (objButton==buttonBack)
+		{
+			if (this.laserController.getState()==Laser2Controller.STATE_DISCONNECTED)
+				this.laserController.setUIMode(MainActivity.UIMODE_REGISTRATION);
+			else if ((this.laserController.getState()==Laser2Controller.STATE_CONNECTED))
+				this.laserController.setUIMode(MainActivity.UIMODE_GAME);
+		}
 	}
 	
 	public void setPlayerAliveStatus(boolean isPlayerAlive)
@@ -128,14 +139,14 @@ public class DebugFragment extends Fragment implements OnClickListener,OnItemCli
 	{
 		for (BluetoothDevice device:deviceList)
 		{
-			foundDevicesAdapter.add(device.getAddress());
+			//foundDevicesAdapter.add(device.getAddress());
 		}
 	}
 	
 	@Override
 	public void onItemClick(AdapterView<?> listView, View item, int index, long id)
 	{
-		laserController.setBTPairAddress(foundDevicesAdapter.getItem(index));
+		//laserController.setBTPairAddress(foundDevicesAdapter.getItem(index));
 		System.out.println("saving bt address");
 	}
 }

@@ -8,6 +8,7 @@ import android.util.JsonWriter;
 public class UpdatePacket extends CommunicationPacket 
 {
 	protected static final String NAME_TIME="time";
+	protected static final String NAME_GAMEID="gameid";
 	protected static final String NAME_ANDROIDID="androidId";
 	protected static final String NAME_LOCATION="location";
 	protected static final String NAME_ACCURACY="accuracy";
@@ -31,6 +32,7 @@ public class UpdatePacket extends CommunicationPacket
 	public long packageTime;
 	public String action;
 	public String state;
+	public String gameId;
 	
 	public UpdatePacket()
 	{
@@ -50,6 +52,7 @@ public class UpdatePacket extends CommunicationPacket
 			jsonWriter.beginObject();
 			jsonWriter.name(NAME_TYPE).value(CommunicationPacket.MESSAGETYPE_UPDATE);
 			jsonWriter.name(NAME_ANDROIDID).value(id);
+			jsonWriter.name(NAME_GAMEID).value(gameId);
 			if (location==null)
 			{
 				//jsonWriter.name(NAME_LOCATION).value(Location.convert(location.getLatitude(), Location.FORMAT_DEGREES)+","+Location.convert(location.getLongitude(), Location.FORMAT_DEGREES));
@@ -59,7 +62,7 @@ public class UpdatePacket extends CommunicationPacket
 			else
 			{
 				jsonWriter.name(NAME_LOCATION).value(Location.convert(location.getLatitude(), Location.FORMAT_DEGREES)+","+Location.convert(location.getLongitude(), Location.FORMAT_DEGREES));
-				jsonWriter.name(NAME_ACCURACY).value(location.getAccuracy());
+				jsonWriter.name(NAME_ACCURACY).value((int)Math.round(location.getAccuracy()));
 			}
 			
 			jsonWriter.name(NAME_HEADING).value(heading);

@@ -10,7 +10,7 @@ import com.bluno.BlunoHandler;
 import com.google.android.gms.common.ConnectionResult;
 import com.toaster.internalsensor.InternalSensorController;
 import com.toaster.internalsensor.InternalSensorHandler;
-import com.toaster.internalsensor.PoseCalculator;
+import com.toaster.internalsensor.pose.PoseCalculator;
 import com.toaster.laser2.MainActivity;
 import com.toaster.laser2.UIHandler;
 import com.toaster.laser2.communicationpacket.CommunicationPacket;
@@ -31,8 +31,8 @@ import android.util.Log;
 
 public class Laser2Controller implements LocationControllerHandler, IMessageHandler, InternalSensorHandler,BlunoHandler
 {
-	protected final static int STATE_DISCONNECTED = 0;
-	protected final static int STATE_CONNECTED = 1;
+	public final static int STATE_DISCONNECTED = 0;
+	public final static int STATE_CONNECTED = 1;
 
 	protected final static int UDP_TARGETPORT = 21500;
 	protected final static int UDP_RECEIVEPORT = 21501;
@@ -181,6 +181,20 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 		debugStringBuffer.append("Azimuth = " + this.azimuth + "\n");
 		debugStringBuffer.append("Pose = " + this.pose + "\n");
 		debugStringBuffer.append("Last sensor Data: "+lastSensorDataTime+"\n");
+		if (sensorBTAddress==null)
+		{
+			//this.errorList.add("Belum dipair dengan sensor");
+			debugStringBuffer.append("Belum dipair dengan sensor"+"\n");
+		}
+		else if (blunoConnection.getConnectionState()!=connectionStateEnum.isConnected)
+		{
+			//this.errorList.add("Belum terkoneksi dengan sensor");
+			debugStringBuffer.append("Belum terkoneksi dengan sensor"+"\n");
+		}
+		else
+		{
+			debugStringBuffer.append("Terkoneksi dengan sensor"+"\n");
+		}
 		debugStringBuffer.append("SensorData-GunId:"+lastSensorData[BLUNODATAIDX_GUNID]+"\n");
 		debugStringBuffer.append("SensorData-Counter:"+lastSensorData[BLUNODATAIDX_COUNTER]+"\n");
 		debugStringBuffer.append("SensorData-SensorId:"+lastSensorData[BLUNODATAIDX_SENSORID]+"\n");
@@ -193,9 +207,9 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	}
 
 	@Override
-	public void onAzimuthUpdated(float azimuth)
+	public void onAzimuthUpdated(double azimuth,int id)
 	{
-		this.azimuth = azimuth;
+		this.azimuth = (float)azimuth;
 		this.ui.setDebugStatus(this.generateDebugString());
 	}
 
@@ -334,6 +348,7 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 		UpdatePacket commPacket = new UpdatePacket();
 		commPacket.location = this.currentLocation;
 		commPacket.id = Integer.toString(this.androidId);
+		commPacket.gameId=this.gameId;
 		commPacket.action = UpdatePacket.ACTIONTYPE_UPDATE;
 		commPacket.heading = Math.round(this.azimuth);
 		if (this.playerAlive==true)
@@ -422,6 +437,7 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 		HitPacket commPacket = new HitPacket();
 		commPacket.location = this.currentLocation;
 		commPacket.id = Integer.toString(this.androidId);
+		commPacket.gameId=this.gameId;
 		commPacket.action = UpdatePacket.ACTIONTYPE_HIT;
 		commPacket.heading = Math.round(this.azimuth);
 		if (this.pose == PoseCalculator.POSE_PRONE)
@@ -490,5 +506,15 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	{
 		ui.btDeviceFound(foundDevice);
 		
+	}
+	
+	public int getState()
+	{
+		return this.state;
+	}
+	
+	public void setAzimuthCalculatorId(int id)
+	{
+		this.internalSensor.setActiveAzimuthCalculatorId(id);
 	}
 }

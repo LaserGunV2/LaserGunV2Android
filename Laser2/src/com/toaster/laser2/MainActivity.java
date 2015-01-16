@@ -93,6 +93,7 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 		fragTrans.hide(registrationFragment);
 		fragTrans.hide(gameFragment);
 		fragTrans.hide(debugFragment);
+		fragTrans.hide(preferencesFragment);
 		if (mode==UIMODE_REGISTRATION)
 		{
 			fragTrans.show(registrationFragment);

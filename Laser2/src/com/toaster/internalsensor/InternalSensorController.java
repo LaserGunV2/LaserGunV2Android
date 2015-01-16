@@ -1,7 +1,10 @@
 package com.toaster.internalsensor;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.toaster.internalsensor.azimuth.AzimuthCalculator;
+import com.toaster.internalsensor.azimuth.Kompas2;
+import com.toaster.internalsensor.pose.PoseCalculator;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -17,8 +20,10 @@ public class InternalSensorController implements SensorEventListener,InternalSen
 	
 	protected InternalSensorHandler handler;
     protected AzimuthCalculator azimuth;
+    protected Kompas2 azimuth2;
     protected PoseCalculator pose;
 	public boolean[] sensorStatus;
+	protected int activeAzimuthCalculatorId=1;
     
 	public InternalSensorController(Context context,InternalSensorHandler handler)
 	{
@@ -30,9 +35,15 @@ public class InternalSensorController implements SensorEventListener,InternalSen
 			sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
 			sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY), SensorManager.SENSOR_DELAY_GAME);
 			sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_GAME);
-			this.azimuth=new AzimuthCalculator(this);
+			this.azimuth=new AzimuthCalculator(this,0);
 			this.pose=new PoseCalculator(this);
+			this.azimuth2=new Kompas2(this,1);
 		}
+	}
+	
+	public void setActiveAzimuthCalculatorId(int id)
+	{
+		this.activeAzimuthCalculatorId=id;
 	}
 	
 	protected void checkSensorStatus(SensorManager sensorManager)
@@ -41,10 +52,10 @@ public class InternalSensorController implements SensorEventListener,InternalSen
 		List<Sensor> result=sensorManager.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
 		if (result.size()>0)
 			 sensorStatus[SENSORSTATUS_MAGNETIC]=true;
-		 else
-			 sensorStatus[SENSORSTATUS_MAGNETIC]=false;
-		 result=sensorManager.getSensorList(Sensor.TYPE_GRAVITY);
-		 if (result.size()>0)
+		else 
+			sensorStatus[SENSORSTATUS_MAGNETIC]=false;
+		result=sensorManager.getSensorList(Sensor.TYPE_GRAVITY);
+		if (result.size()>0)
 			 sensorStatus[SENSORSTATUS_GRAVITY]=true;
 		 else
 			 sensorStatus[SENSORSTATUS_GRAVITY]=false;
@@ -73,12 +84,13 @@ public class InternalSensorController implements SensorEventListener,InternalSen
 	public void onSensorChanged(SensorEvent event) {
 		azimuth.onSensorChanged(event);
 		pose.onSensorChanged(event);
-		
+		azimuth2.onSensorChanged(event);
 	}
 
 	@Override
-	public void onAzimuthUpdated(float azimuth) {
-		handler.onAzimuthUpdated(azimuth);
+	public void onAzimuthUpdated(double azimuth,int id) {
+		if (this.activeAzimuthCalculatorId==id)
+			handler.onAzimuthUpdated(azimuth,id);
 		
 	}
 
