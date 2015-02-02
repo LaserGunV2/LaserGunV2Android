@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements UIHandler
 {
@@ -155,7 +156,11 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		if ((keyCode==KeyEvent.KEYCODE_BACK)||(keyCode==KeyEvent.KEYCODE_HOME))
+		{
+			Toast notificationToast=Toast.makeText(this, "Pilih Exit pada menu di pojok kanan atas untuk menghentikan aplikasi", Toast.LENGTH_SHORT);
+			notificationToast.show();
 			return true; 
+		}
 		else
 			return super.onKeyDown(keyCode, event);
 	}
@@ -197,6 +202,11 @@ public class MainActivity extends ActionBarActivity implements UIHandler
 	public void btDeviceFound(BluetoothDevice foundDevice)
 	{
 		preferencesFragment.onBTDeviceFound(foundDevice);
+	}
+	
+	public void setNik(String nik)
+	{
+		gameFragment.setNik(nik);
 	}
 
 }

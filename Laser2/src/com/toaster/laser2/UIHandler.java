@@ -10,6 +10,7 @@ public interface UIHandler
 	public void clearDebug();
 
 	public void setAndroidId(String androidId);
+	public void setNik(String nik);
 	public void setUIMode(int uiMode);
 	public void setStatus(String status);
 	public void setDebugStatus(String debugStatus);

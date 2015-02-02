@@ -152,7 +152,7 @@ public class Kompas2 extends AbstractAzimuthCalculator implements SensorEventLis
 			this.azimuth=360+this.azimuth;
 		}
 		this.handler.onAzimuthUpdated(this.azimuth, this.id);
-		Log.v(this.getClass().getCanonicalName(), "azi="+this.azimuth);
+		//Log.v(this.getClass().getCanonicalName(), "azi="+this.azimuth);
 		//ui.setDebugText(createDebugString());
 	
 	}

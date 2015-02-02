@@ -22,6 +22,7 @@ public class GameFragment extends Fragment implements OnClickListener
 	protected Laser2Controller laserController;
 	protected Button buttonDebug;
 	protected EditText editTextDebug;
+	protected TextView textViewNik;
 	
 
 	@Override
@@ -29,6 +30,7 @@ public class GameFragment extends Fragment implements OnClickListener
 	{
 		View mainView=inflater.inflate(R.layout.game_fragment_layout, null);
 		textViewAndroidId=(TextView)mainView.findViewById(R.id.androidIdLabel);
+		textViewNik=(TextView)mainView.findViewById(R.id.nikLabel);
 		buttonDebug=(Button)mainView.findViewById(R.id.game_buttonDebugMode);
 		editTextDebug=(EditText)mainView.findViewById(R.id.game_editTextDebugVerification);
 		buttonDebug.setOnClickListener(this);
@@ -42,7 +44,12 @@ public class GameFragment extends Fragment implements OnClickListener
 
 	public void setAndroidId(String androidId)
 	{
-		this.textViewAndroidId.setText(androidId);
+		this.textViewAndroidId.setText("ID : "+androidId);
+	}
+	
+	public void setNik(String nik)
+	{
+		this.textViewNik.setText("NIK : "+nik);
 	}
 	
 	public void setPlayerAliveStatus(boolean isPlayerAlive)

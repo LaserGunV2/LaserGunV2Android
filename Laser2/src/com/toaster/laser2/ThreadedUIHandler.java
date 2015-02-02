@@ -19,6 +19,7 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 	protected static final int MSG_setFoundBTDevices=7;
 	protected static final int MSG_updateErrorStatus=8;
 	protected static final int MSG_btDeviceFound=9;
+	protected static final int MSG_setNik=10;
 	
 	protected UIHandler actualUI;
 	
@@ -89,6 +90,12 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 				actualUI.btDeviceFound((BluetoothDevice)msg.obj);
 			}
 			break;
+			case MSG_setNik:
+			{
+				String par=(String)msg.obj;
+				actualUI.setNik(par);
+			}
+			break;
 		}
 	}
 
@@ -151,6 +158,10 @@ public class ThreadedUIHandler extends Handler implements UIHandler
 		
 	}
 	
+	public void setNik(String nik)
+	{
+		(this.obtainMessage(MSG_setNik, nik)).sendToTarget();
+	}
 	
 
 }

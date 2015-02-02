@@ -21,6 +21,7 @@ import com.toaster.laser2.communicationpacket.UpdatePacket;
 import com.toaster.laser2.locationcontroller.LocationController;
 import com.toaster.laser2.locationcontroller.LocationControllerHandler;
 import com.toaster.laser2.storage.StorageController;
+import com.toaster.sound.SoundController;
 import com.toaster.udpcommunication.IMessageHandler;
 import com.toaster.udpcommunication.UDPPacketManager;
 
@@ -48,6 +49,7 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	// protected CommunicationPacket commPacket;
 	protected int state;
 	protected LocationController locController;
+	protected SoundController soundController;
 	protected UDPPacketManager commManager;
 	protected InternalSensorController internalSensor;
 	protected StorageController storageController;
@@ -74,6 +76,7 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	
 	public Laser2Controller(Context context, UIHandler ui)
 	{
+		this.soundController=new SoundController(context);
 		this.commManager = UDPPacketManager.createBroadcastUDPManager(this, context, UDP_TARGETPORT, UDP_RECEIVEPORT);
 		this.locController = new LocationController(context, this);
 		this.internalSensor = new InternalSensorController(context, this);
@@ -248,6 +251,7 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 			this.androidId = ((ConfirmPacket) decodedPacket).androidId;
 			this.state = STATE_CONNECTED;
 			this.ui.setAndroidId(Integer.toString(this.androidId));
+			this.ui.setNik(this.nomorInduk);
 			this.stopConnectionRetryTimer();
 			this.startUpdateTimer();
 			this.ui.setDebugStatus(this.generateDebugString());
@@ -429,11 +433,14 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 
 	public void simulateHit(int idSenjata, int counter)
 	{
+		Log.v(this.getClass().getCanonicalName(), "hit");
 		this.sendHitUpdate(idSenjata, counter,0);
 	}
 
 	protected void sendHitUpdate(int idSenjata, int counter,int sensorId)
 	{
+		
+		soundController.playSound(SoundController.SOUND_HIT);
 		HitPacket commPacket = new HitPacket();
 		commPacket.location = this.currentLocation;
 		commPacket.id = Integer.toString(this.androidId);
@@ -451,20 +458,27 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 		commPacket.idSenjata = idSenjata;
 		commPacket.counter = counter;
 		byte[] buffer = commPacket.getAsByteArray();
-		this.commManager.send(buffer, 0, buffer.length, 0, this.serverAddress);
+		if (this.state==Laser2Controller.STATE_CONNECTED)
+			this.commManager.send(buffer, 0, buffer.length, 0, this.serverAddress);
 	}
 
 	@Override
 	public void onDataReceived(String strGunId, String strCounter, String strSensorId)
 	{
-		// TODO Auto-generated method stub
-		this.lastSensorData[BLUNODATAIDX_GUNID]=Integer.parseInt(strGunId);
-		this.lastSensorData[BLUNODATAIDX_COUNTER]=Integer.parseInt(strCounter);
-		this.lastSensorData[BLUNODATAIDX_SENSORID]=Integer.parseInt(strSensorId);
-		this.lastSensorDataTime=System.currentTimeMillis();
-		if (this.state == STATE_CONNECTED)
+		try
 		{
-			this.sendHitUpdate(this.lastSensorData[BLUNODATAIDX_GUNID], this.lastSensorData[BLUNODATAIDX_COUNTER], this.lastSensorData[BLUNODATAIDX_SENSORID]);
+			this.lastSensorData[BLUNODATAIDX_GUNID]=Integer.parseInt(strGunId);
+			this.lastSensorData[BLUNODATAIDX_COUNTER]=Integer.parseInt(strCounter);
+			this.lastSensorData[BLUNODATAIDX_SENSORID]=Integer.parseInt(strSensorId);
+			this.lastSensorDataTime=System.currentTimeMillis();
+			if (this.state == STATE_CONNECTED)
+			{
+				this.sendHitUpdate(this.lastSensorData[BLUNODATAIDX_GUNID], this.lastSensorData[BLUNODATAIDX_COUNTER], this.lastSensorData[BLUNODATAIDX_SENSORID]);
+			}
+		}
+		catch (Exception e)
+		{
+			Log.v(this.getClass().getCanonicalName(), "btparseerror"+e.toString());
 		}
 	}
 

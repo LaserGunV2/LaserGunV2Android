@@ -5,10 +5,19 @@
     <TextView 
         android:id="@+id/androidIdLabel"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:textSize="100dp"
+        android:gravity="center"
+        />
+    <TextView 
+        android:id="@+id/nikLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/androidIdLabel"
+        android:textSize="30dp"
         android:gravity="center"
         />
    	<Button 
