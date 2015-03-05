@@ -18,6 +18,7 @@ public class SoundController
 	
 	protected MediaPlayer soundPlayer;
 	protected AudioManager audioManager;
+	protected AssetFileDescriptor hitAsset;
 	//protected boolean isReady;
 	
 	public SoundController(Context context)
@@ -28,11 +29,12 @@ public class SoundController
 		this.soundPlayer=new MediaPlayer();
 		//this.hitPlayer=MediaPlayer.create(context, testUri);
 		//Log.v(this.getClass().getCanonicalName(), "player:"+this.hitPlayer);
-		AssetFileDescriptor hitAsset;
+		
 		try
 		{
 			hitAsset = context.getAssets().openFd("Annoying_Alarm.wav");
 			this.soundPlayer.setDataSource(hitAsset.getFileDescriptor(),hitAsset.getStartOffset(),hitAsset.getLength());
+			this.soundPlayer.prepare();
 		}
 		catch (IOException e)
 		{
@@ -47,23 +49,30 @@ public class SoundController
 		if (this.soundPlayer.isPlaying())
 		{
 			this.soundPlayer.stop();
-			
+			try
+			{
+				this.soundPlayer.prepare();
+			}
+			catch (IllegalStateException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		try
 		{
-			this.soundPlayer.prepare();
+			this.soundPlayer.start(); 
 		}
 		catch (IllegalStateException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.soundPlayer.start();
 	
 	}
 }

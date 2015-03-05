@@ -434,13 +434,14 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 	public void simulateHit(int idSenjata, int counter)
 	{
 		Log.v(this.getClass().getCanonicalName(), "hit");
-		this.sendHitUpdate(idSenjata, counter,0);
+		this.onDataReceived(Integer.toString(idSenjata), Integer.toString(counter), "0");
+		//this.sendHitUpdate(idSenjata, counter,0);
 	}
 
 	protected void sendHitUpdate(int idSenjata, int counter,int sensorId)
 	{
 		
-		soundController.playSound(SoundController.SOUND_HIT);
+		
 		HitPacket commPacket = new HitPacket();
 		commPacket.location = this.currentLocation;
 		commPacket.id = Integer.toString(this.androidId);
@@ -471,6 +472,7 @@ public class Laser2Controller implements LocationControllerHandler, IMessageHand
 			this.lastSensorData[BLUNODATAIDX_COUNTER]=Integer.parseInt(strCounter);
 			this.lastSensorData[BLUNODATAIDX_SENSORID]=Integer.parseInt(strSensorId);
 			this.lastSensorDataTime=System.currentTimeMillis();
+			this.soundController.playSound(SoundController.SOUND_HIT);
 			if (this.state == STATE_CONNECTED)
 			{
 				this.sendHitUpdate(this.lastSensorData[BLUNODATAIDX_GUNID], this.lastSensorData[BLUNODATAIDX_COUNTER], this.lastSensorData[BLUNODATAIDX_SENSORID]);
